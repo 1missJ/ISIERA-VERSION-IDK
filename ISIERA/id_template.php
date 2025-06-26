@@ -32,6 +32,13 @@ if (!empty($id_photo_path) && file_exists($id_photo_path)) {
     $id_photo_path = "assets/default.png"; // Default image if not found
 }
 
+$principal_sql = "SELECT principal_name FROM principal LIMIT 1";
+$principal_result = $conn->query($principal_sql);
+if ($principal_result && $principal_result->num_rows > 0) {
+    $principal_row = $principal_result->fetch_assoc();
+    $principal_name = strtoupper($principal_row['principal_name']);
+}
+
 // Debugging output
 if (!file_exists($id_photo_path)) {
     error_log("File not found: " . $id_photo_path);
@@ -77,20 +84,22 @@ $school_year = !empty($student['school_year']) ? htmlspecialchars($student['scho
 
 <div class="print-area">
     <div class="id-wrapper">
-        <!-- Front ID -->
-        <div class="id-container">
-            <img src="assets/id/id_f.jpg" class="background-img">
-            <img id="modalIDPhoto" src="<?php echo $id_photo_path; ?>" class="id-photo">
-<div class="student-name-container">
-    <div class="student-name"><?php echo $full_name; ?></div>
+
+<!-- Front ID -->
+<div class="id-container">
+    <img src="assets/id/id_f.jpg" class="background-img">
+    <img id="modalIDPhoto" src="<?php echo $id_photo_path; ?>" class="id-photo">
+    <div class="student-name-container">
+        <div class="student-name"><?php echo $full_name; ?></div>
+    </div>
+    <div class="student-lrn-container">
+        <div class="student-lrn"><?php echo htmlspecialchars($lrn); ?></div>
+    </div>
+    <div class="principal-container">
+        <div class="principal"><?php echo htmlspecialchars($principal_name); ?></div>
+    </div>
 </div>
-<div class="student-lrn-container">
-    <div class="student-lrn"><?php echo htmlspecialchars($lrn); ?></div>
-</div>
-<div class="principal-container">
-    <div class="principal"></div>
-</div>
-</div>
+
 
         <!-- Back ID -->
 <div class="id-container">

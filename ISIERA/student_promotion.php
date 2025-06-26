@@ -14,7 +14,21 @@ include 'db_connection.php';
 <?php include('sidebar.php'); ?>
 
 <div class="main-content">
-  <h2>Student Promotion</h2>
+
+<div class="dropdown-nav">
+  <label for="gradeSelect">Navigate to:</label>
+  <select id="gradeSelect" onchange="showStudents(this.value)">
+    <option value="">-- Select Grade Level --</option>
+    <option value="Grade 7">Grade 7</option>
+    <option value="Grade 8">Grade 8</option>
+    <option value="Grade 9">Grade 9</option>
+    <option value="Grade 10">Grade 10</option>
+    <option value="Grade 11">Grade 11</option>
+    <option value="Grade 12">Grade 12</option>
+  </select>
+</div>
+
+<h2 id="promotionHeading" style="display: none;">Student Promotion</h2>
 
   <!-- Search Bar -->
   <div class="search-container" id="searchContainer" style="display:none;">
@@ -26,24 +40,6 @@ include 'db_connection.php';
     </div>
   </div>     
 
-  <!-- Grade Level and Student Type Dropdown -->
-  <div class="year-levels">
-    <?php
-    $grades = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
-    $types = ['Regular Student', 'STI Student'];
-
-    foreach ($grades as $grade) {
-        echo "<div class='year-box-wrapper'>
-                <div class='year-box'>{$grade}</div>
-                <div class='dropdown'>";
-        foreach ($types as $type) {
-            echo "<div onclick=\"showStudents('{$grade}', '{$type}')\">{$type}</div>";
-        }
-        echo "</div></div>";
-    }
-    ?>
-  </div>
-
   <!-- Student Table -->
   <table class="student-table" id="studentTable" style="display:none;">
     <thead>
@@ -54,12 +50,13 @@ include 'db_connection.php';
       </tr>
     </thead>
     <tbody id="studentTableBody">
-      <?php
-      foreach ($grades as $grade_level) {
-        $sql = "SELECT section, student_type, COUNT(*) as total_students 
+    <?php
+$grades = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
+foreach ($grades as $grade_level) {
+        $sql = "SELECT section, COUNT(*) as total_students 
                 FROM students 
                 WHERE grade_level = ? 
-                GROUP BY section, student_type
+                GROUP BY section
                 ORDER BY section ASC";
 
         $stmt = $conn->prepare($sql);
@@ -69,23 +66,20 @@ include 'db_connection.php';
 
         while ($row = $result->fetch_assoc()) {
           $section = ucfirst(strtolower(htmlspecialchars($row['section'])));
-          $type = htmlspecialchars($row['student_type']);
           $count = $row['total_students'];
 
-echo "<tr data-grade='" . strtolower($grade_level) . "' data-type='" . strtolower($type) . "' style='display: none;'>
-        <td>{$section}</td>
-        <td>{$count}</td>
-        <td>
-          <button class='view' onclick=\"location.href='promote_students.php?section=" 
-            . urlencode($section) . "&grade_level=" 
-            . urlencode($grade_level) . "&student_type=" 
-            . urlencode($type) . "'\"><ion-icon name='eye-outline'></ion-icon></button>
-          <button class='btn-promote' onclick='openSectionModal(" 
-            . json_encode($grade_level) . ", " 
-            . json_encode($section) . ", " 
-            . json_encode($type) . ")'>Promote</button>
-        </td>
-      </tr>";
+          echo "<tr data-grade='" . strtolower($grade_level) . "' style='display: none;'>
+                  <td>{$section}</td>
+                  <td>{$count}</td>
+                  <td>
+                    <button class='view' onclick=\"location.href='promote_students.php?section=" 
+                      . urlencode($section) . "&grade_level=" 
+                      . urlencode($grade_level) . "'\"><ion-icon name='eye-outline'></ion-icon></button>
+                    <button class='btn-promote' onclick='openSectionModal(" 
+                      . json_encode($grade_level) . ", " 
+                      . json_encode($section) . ")'>Promote</button>
+                  </td>
+                </tr>";
         }
         $stmt->close();
       }
@@ -93,84 +87,81 @@ echo "<tr data-grade='" . strtolower($grade_level) . "' data-type='" . strtolowe
     </tbody>
   </table>
 
-<!-- Section Modal -->
-<div class="section-modal" id="sectionModal" style="display:none;">
-  <div class="section-modal-content">
-    <span class="section-close" onclick="closeSectionModal()">&times;</span>
-    <h3>Enter New Section</h3>
-<form id="sectionForm" method="POST" action="student_promote.php">
-  <input type="text" id="sectionInput" name="new_section" required />
-  <input type="hidden" name="current_grade" id="currentGradeInput" />
-  <input type="hidden" name="current_section" id="currentSectionInput" />
-  <input type="hidden" name="student_type" id="studentTypeInput" />
-  <input type="hidden" name="redirect_url" id="redirectUrlInput" />
-  <button type="submit" id="sectionForm button">Confirm</button>
-</form>
+  <!-- Section Modal -->
+  <div class="section-modal" id="sectionModal" style="display:none;">
+    <div class="section-modal-content">
+      <span class="section-close" onclick="closeSectionModal()">&times;</span>
+      <h3>Enter New Section</h3>
+      <form id="sectionForm" method="POST" action="student_promote.php">
+        <input type="text" id="sectionInput" name="new_section" required />
+        <input type="hidden" name="current_grade" id="currentGradeInput" />
+        <input type="hidden" name="current_section" id="currentSectionInput" />
+        <input type="hidden" name="redirect_url" id="redirectUrlInput" />
+        <button type="submit" id="sectionForm button">Confirm</button>
+      </form>
+    </div>
   </div>
-</div>
 
   <!-- Scripts -->
   <script>
     let currentGrade = "";
-let currentType = "";
 
-function searchStudent() {
-  const input = document.getElementById("searchInput").value.toUpperCase();
-  const rows = document.querySelectorAll("#studentTableBody tr");
-  let hasMatch = false;
+    function searchStudent() {
+      const input = document.getElementById("searchInput").value.toUpperCase();
+      const rows = document.querySelectorAll("#studentTableBody tr");
+      let hasMatch = false;
 
-  rows.forEach(row => {
-    if (row.id === "noDataRow") {
-      row.remove();
-      return;
+      rows.forEach(row => {
+        if (row.id === "noDataRow") {
+          row.remove();
+          return;
+        }
+
+        const grade = row.getAttribute("data-grade");
+
+        if (grade === currentGrade) {
+          const section = row.querySelector("td")?.textContent.toUpperCase() || "";
+          const matched = section.includes(input);
+          row.style.display = matched ? "" : "none";
+          if (matched) hasMatch = true;
+        } else {
+          row.style.display = "none";
+        }
+      });
+
+      const existing = document.getElementById("noDataRow");
+      if (existing) existing.remove();
+
+      if (!hasMatch) {
+        const tbody = document.getElementById("studentTableBody");
+        const noRow = document.createElement("tr");
+        noRow.id = "noDataRow";
+        noRow.innerHTML = "<td colspan='3'>No matching results.</td>";
+        tbody.appendChild(noRow);
+      }
     }
 
-    const grade = row.getAttribute("data-grade");
-    const type = row.getAttribute("data-type");
-
-    if (grade === currentGrade && type === currentType) {
-      const section = row.querySelector("td")?.textContent.toUpperCase() || "";
-      const matched = section.includes(input);
-      row.style.display = matched ? "" : "none";
-      if (matched) hasMatch = true;
-    } else {
-      row.style.display = "none";
-    }
-  });
-
-  const existing = document.getElementById("noDataRow");
-  if (existing) existing.remove();
-
-  if (!hasMatch) {
-    const tbody = document.getElementById("studentTableBody");
-    const noRow = document.createElement("tr");
-    noRow.id = "noDataRow";
-    noRow.innerHTML = "<td colspan='3'>No matching results.</td>";
-    tbody.appendChild(noRow);
-  }
-}
-
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("searchInput").addEventListener("input", searchStudent);
-    });
-    
-function showStudents(yearLevel, studentType) {
-  document.querySelector(".year-levels").style.display = "none";
-  document.getElementById("searchContainer").style.display = "flex";
-
+function showStudents(yearLevel) {
   currentGrade = yearLevel.trim().toLowerCase();
-  currentType = studentType.trim().toLowerCase();
 
-  const table = document.getElementById("studentTable");
-  const rows = document.querySelectorAll("#studentTableBody tr");
+  document.querySelector(".dropdown-nav").style.display = "block";
+  document.getElementById("promotionHeading").style.display = "block";
+  document.getElementById("searchContainer").style.display = "flex";
+  document.getElementById("studentTable").style.display = "table";
 
+  const tbody = document.getElementById("studentTableBody");
+  const rows = tbody.querySelectorAll("tr");
   let found = false;
 
+  // Remove old "no data" row if any
+  const oldNoRow = document.getElementById("noDataRow");
+  if (oldNoRow) oldNoRow.remove();
+
   rows.forEach(row => {
     const grade = row.getAttribute("data-grade");
-    const type = row.getAttribute("data-type");
+    if (!grade) return; // Skip invalid rows
 
-    if (grade === currentGrade && type === currentType) {
+    if (grade === currentGrade) {
       row.style.display = "";
       found = true;
     } else {
@@ -178,56 +169,53 @@ function showStudents(yearLevel, studentType) {
     }
   });
 
-  table.style.display = "table";
-
   if (!found) {
-    document.getElementById("studentTableBody").innerHTML = 
-      "<tr id='noDataRow'><td colspan='3'>No data available.</td></tr>";
+    const noRow = document.createElement("tr");
+    noRow.id = "noDataRow";
+    noRow.innerHTML = "<td colspan='3'>No data available.</td>";
+    tbody.appendChild(noRow);
   }
+
+  // Reset search filter
+  document.getElementById("searchInput").value = "";
 }
 
     document.addEventListener("DOMContentLoaded", () => {
-  const sectionModal = document.getElementById('sectionModal');
-  const sectionInput = document.getElementById('sectionInput');
-  const currentGradeInput = document.getElementById('currentGradeInput');
-  const currentSectionInput = document.getElementById('currentSectionInput');
-  const studentTypeInput = document.getElementById('studentTypeInput');
+      document.getElementById("searchInput").addEventListener("input", searchStudent);
 
-window.openSectionModal = function(gradeLevel, section, studentType) {
-  currentGradeInput.value = gradeLevel;
-  currentSectionInput.value = section;
-  studentTypeInput.value = studentType;
-  sectionInput.value = '';
-  sectionModal.style.display = 'flex';
-  sectionInput.focus();
+      const sectionModal = document.getElementById('sectionModal');
+      const sectionInput = document.getElementById('sectionInput');
+      const currentGradeInput = document.getElementById('currentGradeInput');
+      const currentSectionInput = document.getElementById('currentSectionInput');
 
-  // Save redirect back to current context
-  const redirectUrl = `student_promotion.php?grade=${encodeURIComponent(gradeLevel)}&type=${encodeURIComponent(studentType)}`;
-  document.getElementById("redirectUrlInput").value = redirectUrl;
-};
+      window.openSectionModal = function(gradeLevel, section) {
+        currentGradeInput.value = gradeLevel;
+        currentSectionInput.value = section;
+        sectionInput.value = '';
+        sectionModal.style.display = 'flex';
+        sectionInput.focus();
 
+        const redirectUrl = `student_promotion.php?grade=${encodeURIComponent(gradeLevel)}`;
+        document.getElementById("redirectUrlInput").value = redirectUrl;
+      };
 
-  window.closeSectionModal = function() {
-    sectionModal.style.display = 'none';
-  };
+      window.closeSectionModal = function() {
+        sectionModal.style.display = 'none';
+      };
 
-  window.onclick = function(event) {
-    if (event.target == sectionModal) {
-      closeSectionModal();
-    }
-  };
-});
+      window.onclick = function(event) {
+        if (event.target == sectionModal) {
+          closeSectionModal();
+        }
+      };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const grade = urlParams.get('grade');
-  const type = urlParams.get('type');
-
-  if (grade && type) {
-    showStudents(grade, type);
-  }
-});
-
+      // Show students directly if redirected from promote
+      const urlParams = new URLSearchParams(window.location.search);
+      const grade = urlParams.get('grade');
+      if (grade) {
+        showStudents(grade);
+      }
+    });
   </script>
 
   <!-- Ionicons -->

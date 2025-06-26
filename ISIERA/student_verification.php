@@ -18,7 +18,6 @@ function formatName($first, $middle, $last) {
 // Query para kunin ang mga pending students, ordered by registered date (newest first)
 $sql = "SELECT * FROM pending_students ORDER BY created_at DESC";
 $result = $conn->query($sql);
-
 ?>
 
 <!DOCTYPE html>

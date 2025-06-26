@@ -124,7 +124,7 @@ function capitalizeNamePart($name) {
         <form id="rfidForm">
             <input type="hidden" id="rfidLRN">
             <label for="rfidInput">RFID Number:</label>
-            <input type="text" id="rfidInput" required>
+            <input type="text" id="rfidInput" required pattern="\d{10,12}" title="Please enter 10 to 12 digits only" maxlength="12" inputmode="numeric">
             <button type="submit">Save RFID</button>
         </form>
     </div>
@@ -189,22 +189,29 @@ document.addEventListener("DOMContentLoaded", function () {
     editButtons.forEach(button => {
         button.addEventListener("click", function () {
             const lrn = this.getAttribute("data-lrn");
-            const rfidCell = this.previousElementSibling.textContent.trim();
+            const rfidCell = this.parentElement.querySelector(".rfid-value").textContent.trim();
             rfidInput.value = (rfidCell !== 'Not Assigned') ? rfidCell : '';
             rfidLRN.value = lrn;
             rfidModal.style.display = "flex";
         });
     });
 
+    // RFID Form Submit
     document.getElementById("rfidForm").addEventListener("submit", function (e) {
         e.preventDefault();
         const lrn = rfidLRN.value;
-        const rfid = rfidInput.value;
+        const rfid = rfidInput.value.trim();
+
+        // Validate RFID: 10 to 12 digits only
+        if (!/^\d{10,12}$/.test(rfid)) {
+            alert("RFID must be a numeric value with 10 to 12 digits only.");
+            return;
+        }
 
         fetch("update_rfid.php", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `lrn=${lrn}&rfid=${rfid}`
+            body: `lrn=${encodeURIComponent(lrn)}&rfid=${encodeURIComponent(rfid)}`
         })
         .then(response => response.text())
         .then(result => {
@@ -216,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-});
+}); // ✅ this was missing and is now added!
 
 function closeRfidModal() {
     document.getElementById("rfidModal").style.display = "none";

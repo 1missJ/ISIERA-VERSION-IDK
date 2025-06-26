@@ -1,0 +1,241 @@
+<?php
+include('db_connection.php'); // ✅ Ensure DB is included
+session_start();
+
+if (!isset($_SESSION['teacher_id'])) {
+    header("Location: index.php");
+    exit();
+}
+
+$teacherName = $_SESSION['teacher_name'];
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance - Mabini</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/attendance.css">
+</head>
+<body>
+<?php include('adviser_sidebar.php'); ?>
+
+<div class="main-content">
+    <h2>Mabini</h2>
+
+    <!-- Subject and Period Dropdowns -->
+    <div class="info-line">
+        <div>
+            <label for="subjectSelect">Subject:</label>
+            <?php
+            include('db_connection.php');
+            $subject_query = $conn->query("SELECT subject_name FROM subjects ORDER BY subject_name ASC");
+            ?>
+            <select id="subjectSelect" onchange="loadAttendance()">
+                <option value="Select">Select</option>
+                <?php while ($row = $subject_query->fetch_assoc()): ?>
+                    <option value="<?= htmlspecialchars($row['subject_name']) ?>">
+                        <?= htmlspecialchars($row['subject_name']) ?>
+                    </option>
+                <?php endwhile; ?>
+            </select>
+        </div>
+
+        <div>
+            <label for="periodSelect">Period:</label>
+            <select id="periodSelect" onchange="loadAttendance()">
+                <option value="Select">Select</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Quarterly">Quarterly</option>
+            </select>
+        </div>
+
+        <div id="searchContainer" style="display: none;" class="search-bar">
+            <input type="text" id="remarkSearch" placeholder="Search by Remark" onkeydown="handleKeyPress(event)">
+            <button onclick="filterByRemark()">Search</button>
+        </div>  
+
+        <div class="export-buttons-fixed" style="display: none;">
+            <select id="exportSelect" onchange="handleExportChange()">
+                <option value="export">Export</option>
+                <option value="word">Word</option>
+                <option value="excel">Excel</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Attendance Table -->
+    <div class="attendance-list" id="attendanceList" style="display: none;"></div>
+</div>
+
+<script>
+    const attendanceData = [
+        { subject: "Math", date: "2025-06-25", time: "08:10AM", remark: "Present" },
+        { subject: "Math", date: "2025-06-25", time: "08:05AM", remark: "Absent" },
+        { subject: "Math", date: "2025-06-25", time: "08:02AM", remark: "Present" },
+        { subject: "Math", date: "2025-06-25", time: "08:10AM", remark: "Present" },
+        { subject: "English", date: "2025-06-24", time: "08:10AM", remark: "Present" },
+        { subject: "English", date: "2025-06-24", time: "08:05AM", remark: "Absent" },
+        { subject: "English", date: "2025-06-24", time: "08:10AM", remark: "Absent" },
+        { subject: "English", date: "2025-06-24", time: "08:10AM", remark: "Present" },
+        { subject: "English", date: "2025-06-24", time: "08:10AM", remark: "Present" }
+    ];
+
+    let currentFiltered = [];
+
+    function loadAttendance() {
+        const period = document.getElementById("periodSelect").value;
+        const subject = document.getElementById("subjectSelect").value;
+        const searchContainer = document.getElementById("searchContainer");
+
+        if (period !== "Select" && subject !== "Select") {
+            currentFiltered = attendanceData.filter(entry => entry.subject === subject);
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+            if (currentFiltered.length > 0) {
+                currentFiltered.forEach(entry => {
+                    const remarkClass = entry.remark === "Present" ? "present" : "absent";
+                    html += `
+                        <tr>
+                            <td>${entry.date}</td>
+                            <td>${entry.time}</td>
+                            <td class="${remarkClass}">${entry.remark}</td>
+                        </tr>`;
+                });
+                searchContainer.style.display = "flex";
+                document.querySelector(".export-buttons-fixed").style.display = "block";
+            } else {
+                html += `<tr><td colspan="3" class="no-data">No attendance data found for this subject.</td></tr>`;
+                searchContainer.style.display = "none";
+                document.querySelector(".export-buttons-fixed").style.display = "none";
+            }
+
+            html += `</tbody></table>`;
+            document.getElementById("attendanceList").innerHTML = html;
+            document.getElementById("attendanceList").style.display = "block";
+        } else {
+            document.getElementById("attendanceList").style.display = "none";
+            searchContainer.style.display = "none";
+            document.querySelector(".export-buttons-fixed").style.display = "none";
+        }
+    }
+
+    function filterByRemark() {
+        const keyword = document.getElementById("remarkSearch").value.trim().toLowerCase();
+
+        if (!keyword || (keyword !== "present" && keyword !== "absent")) {
+            alert("Please enter 'Present' or 'Absent' only.");
+            return;
+        }
+
+        const filtered = currentFiltered.filter(entry => entry.remark.toLowerCase() === keyword);
+
+        let html = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+        if (filtered.length > 0) {
+            filtered.forEach(entry => {
+                const remarkClass = entry.remark === "Present" ? "present" : "absent";
+                html += `
+                    <tr>
+                        <td>${entry.date}</td>
+                        <td>${entry.time}</td>
+                        <td class="${remarkClass}">${entry.remark}</td>
+                    </tr>`;
+            });
+        } else {
+            html += `<tr><td colspan="3" class="no-data">No results found for '${keyword}'.</td></tr>`;
+        }
+
+        html += `</tbody></table>`;
+        document.getElementById("attendanceList").innerHTML = html;
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            filterByRemark();
+        }
+    }
+
+    function exportToWord() {
+        const subject = document.getElementById("subjectSelect").value;
+        const period = document.getElementById("periodSelect").value;
+        const section = "Mabini";
+        const fileName = `${section}_${subject}_${period}.doc`;
+
+        const attendanceTable = document.querySelector("table").outerHTML;
+
+        const header = `
+            <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+                  xmlns:w='urn:schemas-microsoft-com:office:word' 
+                  xmlns='http://www.w3.org/TR/REC-html40'>
+            <head><meta charset='utf-8'></head>
+            <body>
+                <h2>${section} - ${subject} Attendance</h2>
+                <p>Period: ${period}</p><hr>`;
+
+        const footer = "</body></html>";
+        const sourceHTML = header + attendanceTable + footer;
+        const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+
+        const fileDownload = document.createElement("a");
+        document.body.appendChild(fileDownload);
+        fileDownload.href = source;
+        fileDownload.download = fileName;
+        fileDownload.click();
+        document.body.removeChild(fileDownload);
+    }
+
+    function exportToExcel() {
+        const subject = document.getElementById("subjectSelect").value;
+        const period = document.getElementById("periodSelect").value;
+        const section = "Mabini";
+        const fileName = `${section}_${subject}_${period}.xlsx`;
+
+        const table = document.querySelector("table");
+        const ws = XLSX.utils.table_to_sheet(table);
+        const wb = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(wb, ws, "Attendance");
+        XLSX.writeFile(wb, fileName);
+    }
+
+    function handleExportChange() {
+        const exportOption = document.getElementById("exportSelect").value;
+
+        if (exportOption === "word") {
+            exportToWord();
+        } else if (exportOption === "excel") {
+            exportToExcel();
+        }
+
+        document.getElementById("exportSelect").value = "export";
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

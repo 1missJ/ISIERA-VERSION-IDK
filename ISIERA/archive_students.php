@@ -21,25 +21,28 @@ $groups = mysqli_num_rows($result) > 0 ? mysqli_fetch_all($result, MYSQLI_ASSOC)
 <?php include('sidebar.php'); ?>
 
 <div class="main-content">
-    <h2>Archive</h2>
+    <div class="dropdown-nav">
+  <label for="gradeSelect">Navigate to:</label>
+  <select id="gradeSelect" onchange="filterByGrade(this.value)">
+    <option value="">-- Select Grade Level --</option>
+    <option value="Grade 7">Grade 7</option>
+    <option value="Grade 8">Grade 8</option>
+    <option value="Grade 9">Grade 9</option>
+    <option value="Grade 10">Grade 10</option>
+    <option value="Grade 11">Grade 11</option>
+    <option value="Grade 12">Grade 12</option>
+    <option value="JHS Graduate">JHS Graduate</option>
+    <option value="SHS Graduate">SHS Graduate</option>
+  </select>
+</div>
+
+<h2 id="archiveHeading" style="display: none;">Archive Students</h2>
 
     <div class="search-container" style="display:none;">
         <form id="searchForm" onsubmit="return false;">
             <input type="text" id="searchInput" placeholder="Search by Section..." oninput="searchGroup()">
             <button type="submit">Search</button>
         </form>
-    </div>
-
-    <!-- Grade Level Filter Buttons -->
-    <div class="year-levels">
-        <?php
-        $grades = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
-        foreach ($grades as $grade) {
-            echo "<div class='year-box-wrapper'>
-                    <div class='year-box' onclick=\"filterByGrade('{$grade}')\">{$grade}</div>
-                  </div>";
-        }
-        ?>
     </div>
 
     <table class="student-table" id="studentTable" style="display: none;">
@@ -111,9 +114,14 @@ function searchGroup() {
 function filterByGrade(grade) {
     selectedGrade = grade.trim().toLowerCase();
 
-    document.querySelector(".year-levels").style.display = "none";
-    document.querySelector(".search-container").style.display = "block";
+    // Always show dropdown nav
+    document.querySelector(".dropdown-nav").style.display = "block";
 
+    // Show heading only after selection
+    document.getElementById("archiveHeading").style.display = "block";
+
+    // Show search and table
+    document.querySelector(".search-container").style.display = "block";
     const table = document.getElementById("studentTable");
     const tbody = document.getElementById("studentTableBody");
     const rows = tbody.querySelectorAll("tr");
@@ -124,7 +132,6 @@ function filterByGrade(grade) {
 
     rows.forEach(row => {
         const rowGrade = row.getAttribute("data-grade");
-
         if (rowGrade === selectedGrade) {
             row.style.display = "";
             found = true;

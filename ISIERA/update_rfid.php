@@ -1,23 +1,22 @@
 <?php
-include 'db_connection.php';
+include('db_connection.php');
 
 $lrn = $_POST['lrn'] ?? '';
 $rfid = $_POST['rfid'] ?? '';
 
-if (!empty($lrn) && !empty($rfid)) {
-    $stmt = $conn->prepare("UPDATE students SET rfid = ? WHERE lrn = ?");
-    $stmt->bind_param("ss", $rfid, $lrn);
-    
-    if ($stmt->execute()) {
-        echo "success";
-    } else {
-        echo "error";
-    }
-
-    $stmt->close();
-} else {
+// Validate RFID is 10 to 12 digits
+if (!preg_match('/^\d{10,12}$/', $rfid)) {
     echo "invalid";
+    exit;
 }
 
-$conn->close();
+$lrn_safe = mysqli_real_escape_string($conn, $lrn);
+$rfid_safe = mysqli_real_escape_string($conn, $rfid);
+
+$sql = "UPDATE students SET rfid = '$rfid_safe' WHERE lrn = '$lrn_safe'";
+if (mysqli_query($conn, $sql)) {
+    echo "success";
+} else {
+    echo "error";
+}
 ?>

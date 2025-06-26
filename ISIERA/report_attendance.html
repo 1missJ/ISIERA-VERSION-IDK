@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance - <?php echo $section; ?></title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/attendance.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li class="brand-logo">
+                    <a href="#">
+                        <div class="logo-container">
+                            <img src="assets/imgs/logo.png">
+                        </div>
+                        <span class="title">TapTrack</span>
+                    </a>
+                </li>                    
+                
+                <li>
+                    <a href="dashboard.php">
+                        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="student_verification.php">
+                        <span class="icon"><ion-icon name="checkmark-done-circle-outline"></ion-icon></span>
+                        <span class="title">Student Verification</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="student_details.php">
+                        <span class="icon"><ion-icon name="people-circle-outline"></ion-icon> </span>
+                        <span class="title">Student Information</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="id_generation.php">
+                        <span class="icon"><ion-icon name="card-outline"></ion-icon></span>
+                        <span class="title">ID Generation with RFID</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="faculty_registration.php">
+                        <span class="icon"><ion-icon name="school-outline"></ion-icon></span>
+                        <span class="title">Faculty Registration</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="subject_management.php">
+                        <span class="icon"><ion-icon name="library-outline"></ion-icon></span>
+                        <span class="title">Subject Management</span>
+                    </a>
+                </li>
+
+                <li style="display: none;">
+                    <a href="enrollment_admin.html">
+                        <span class="icon"><ion-icon name="newspaper-outline"></ion-icon></span>
+                        <span class="title">Enrollment</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="attendance_monitoring.html">
+                        <span class="icon"><ion-icon name="stats-chart-outline"></ion-icon></span>
+                        <span class="title">Attendance Monitoring</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="student_promotion.php">
+                        <span class="icon"><ion-icon name="ribbon-outline"></ion-icon></span>
+                        <span class="title">Students Promotion</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="user.php">
+                        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+                        <span class="title">Users</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="index.php">
+                        <span class="icon"><ion-icon name="log-in-outline"></ion-icon></span>
+                        <span class="title">Sign out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="attendance-list" id="attendanceList">
+            <h2>Attendance Details</h2>                        
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceTableBody">
+                    <!-- Dynamic rows will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="export-buttons-fixed">
+        <select id="exportSelect" onchange="handleExportChange()">
+            <option value="export">Export</option>
+            <option value="word">Word</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+
+    <script>
+        const weeklyDetails = {
+            "Week 1 (Jan 1 - Jan 5)": [
+                { date: "Jan 1, 2025", present: 6, absent: 2 },
+                { date: "Jan 2, 2025", present: 7, absent: 1 },
+                { date: "Jan 3, 2025", present: 6, absent: 3 },
+                { date: "Jan 4, 2025", present: 9, absent: 0 },
+                { date: "Jan 5, 2025", present: 9, absent: 0 },
+            ],
+            "Week 2 (Jan 8 - Jan 12)": [
+                { date: "Jan 8, 2025", present: 8, absent: 2 },
+                { date: "Jan 9, 2025", present: 6, absent: 3 },
+                { date: "Jan 10, 2025", present: 7, absent: 2 },
+                { date: "Jan 11, 2025", present: 8, absent: 1 },
+                { date: "Jan 12, 2025", present: 8, absent: 1 },
+            ]
+        };
+
+        const monthlyDetails = [
+            { date: "Jan 1, 2025", present: 6, absent: 2 },
+            { date: "Jan 2, 2025", present: 7, absent: 1 },
+            { date: "Jan 3, 2025", present: 6, absent: 3 },
+            { date: "Jan 4, 2025", present: 9, absent: 0 },
+            { date: "Jan 5, 2025", present: 9, absent: 0 },
+            { date: "Jan 6, 2025", present: 8, absent: 2 },
+            { date: "Jan 7, 2025", present: 7, absent: 2 },
+            { date: "Jan 8, 2025", present: 8, absent: 2 },
+            { date: "Jan 9, 2025", present: 6, absent: 3 },
+            { date: "Jan 10, 2025", present: 7, absent: 2 },
+            { date: "Jan 11, 2025", present: 8, absent: 1 },
+            { date: "Jan 12, 2025", present: 8, absent: 1 },
+        ];
+        const quarterlyDetails = {
+    "Q1 (Jan)": [
+        { date: "Jan 1, 2025", present: 89, absent: 19 },
+        { date: "Feb 10, 2025", present: 0, absent: 0 },
+        { date: "Mar 3, 2025", present: 0, absent: 0 },
+    ],
+};
+
+
+        // Extract query parameters
+        const params = new URLSearchParams(window.location.search);
+        const period = params.get('period');
+        const label = params.get('label');
+        const section = params.get('section'); 
+        const subject = params.get('subject'); 
+
+        // Check if the period is weekly, monthly, or quarterly and render the appropriate data
+        if (period === "weekly" && weeklyDetails[label]) {
+            renderTable(weeklyDetails[label]);
+        } else if (period === "monthly") {
+            renderTable(monthlyDetails);
+        } else if (period === "quarterly" && quarterlyDetails[label]) {
+            renderTable(quarterlyDetails[label]);
+        } else {
+            document.getElementById("attendanceList").innerHTML = "<p style='text-align:center;'>No data available for this period.</p>";
+        }
+
+        // Function to render the attendance table
+        function renderTable(data) {
+            let html = "";
+            data.forEach(row => {
+                html += ` 
+                    <tr>
+                        <td>${row.date}</td>
+                        <td class="present">${row.present}</td>
+                        <td class="absent">${row.absent}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById("attendanceTableBody").innerHTML = html;
+        }
+
+        function handleExportChange() {
+            const selectedExport = document.getElementById("exportSelect").value;
+            if (selectedExport === "word") {
+                exportToWord();
+            } else if (selectedExport === "excel") {
+                exportToExcel();
+            }
+        }
+
+        function exportToWord() {
+            const fileName = `${section}_${subject}_${period}.doc`;
+            const attendanceTable = document.querySelector("table").outerHTML;
+
+            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+                "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+                "xmlns='http://www.w3.org/TR/REC-html40'>" +
+                "<head><meta charset='utf-8'><title>Export HTML to Word</title></head><body>";
+            const footer = "</body></html>";
+
+            const sourceHTML = header + attendanceTable + footer;
+            const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+
+            const fileDownload = document.createElement("a");
+            document.body.appendChild(fileDownload);
+            fileDownload.href = source;
+            fileDownload.download = fileName;
+            fileDownload.click();
+            document.body.removeChild(fileDownload);
+        }
+
+        function exportToExcel() {
+            const fileName = `${section}_${subject}_${period}.xls`;
+            const attendanceTable = document.querySelector("table").outerHTML;
+
+            const fullHTML = `
+                <html xmlns:x="urn:schemas-microsoft-com:office:excel">
+                    <head><meta charset="UTF-8"></head>
+                    <body>${attendanceTable}</body>
+                </html>
+            `;
+            const blob = new Blob([fullHTML], { type: 'application/vnd.ms-excel' });
+
+            const fileDownload = document.createElement("a");
+            fileDownload.href = URL.createObjectURL(blob);
+            fileDownload.download = fileName;
+            fileDownload.click();
+        }
+    </script>    
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

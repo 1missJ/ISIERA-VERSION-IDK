@@ -52,12 +52,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_adviser'])) {
   <link rel="stylesheet" href="assets/css/style.css" />
   <style>
     body {
-      background: #f0f2f5;
+      background: #f9f9f9;
       font-family: 'Segoe UI', sans-serif;
     }
     .main-content {
       margin-left: 300px;
       padding: 30px;
+    }
+    .dropdown-nav {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    }
+    .dropdown-nav select {
+      padding: 8px 12px;
+      border-radius: 6px;
     }
     button.add-btn {
       background-color: #2a2185;
@@ -68,6 +79,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_adviser'])) {
       cursor: pointer;
       font-size: 14px;
       margin-bottom: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+    table thead {
+      background-color: #d0e8ff;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+      font-size: 14px;
     }
     .modal-overlay {
       display: none;
@@ -129,19 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_adviser'])) {
     }
     .alert-success { background-color: #d4edda; color: #155724; }
     .alert-danger { background-color: #f8d7da; color: #721c24; }
-
-        .dropdown-nav {
-      background-color: #fff;
-      border-radius: 12px;
-      padding: 15px 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    }
-
-    .dropdown-nav select {
-      padding: 8px 12px;
-      border-radius: 6px;
-    }
   </style>
 </head>
 <body>
@@ -169,67 +183,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_adviser'])) {
   <button class="add-btn" onclick="openModal('subjectModal')">+ Assign Subject to Teacher</button>
   <button class="add-btn" onclick="openModal('adviserModal')">+ Assign Adviser to Section</button>
   
-  <!-- Subject Teacher Assignments Table -->
-<h5 style="margin-top: 30px; margin-bottom: 10px; text-align:center;">Subject Teacher Assignments</h5>
-<table border="1" cellpadding="8" cellspacing="0" style="width: 100%; background: #fff; border-collapse: collapse;">
-  <tr style="background:rgb(12, 182, 255); color: white;">
-    <th>Teacher</th>
-    <th>Subject</th>
-    <th>Section</th>
-    <th>Grade Level</th>
-  </tr>
-  <?php
-    $assignments = $conn->query("
-      SELECT f.name AS teacher_name, s.subject_name, sec.section_name, sec.grade_level
-      FROM teacher_subjects ts
-      JOIN faculty f ON ts.teacher_id = f.id
-      JOIN subjects s ON ts.subject_id = s.id
-      JOIN sections sec ON ts.section_id = sec.id
-      ORDER BY sec.grade_level ASC, sec.section_name ASC
-    ");
-    if ($assignments->num_rows > 0):
-      while ($row = $assignments->fetch_assoc()):
-  ?>
-    <tr>
-      <td><?= htmlspecialchars($row['teacher_name']) ?></td>
-      <td><?= htmlspecialchars($row['subject_name']) ?></td>
-      <td><?= htmlspecialchars($row['section_name']) ?></td>
-      <td>Grade <?= htmlspecialchars($row['grade_level']) ?></td>
-    </tr>
-  <?php endwhile; else: ?>
-    <tr><td colspan="4" style="text-align:center;">No subject-teacher assignments found.</td></tr>
-  <?php endif; ?>
-</table>
+  <h2>Subject Teacher Assignments</h2>
+  <table>
+    <thead>
+      <tr><th>Teacher</th><th>Subject</th><th>Section</th><th>Grade Level</th></tr>
+    </thead>
+    <tbody>
+      <?php
+      $assignments = $conn->query("SELECT f.name AS teacher_name, s.subject_name, sec.section_name, sec.grade_level FROM teacher_subjects ts JOIN faculty f ON ts.teacher_id = f.id JOIN subjects s ON ts.subject_id = s.id JOIN sections sec ON ts.section_id = sec.id ORDER BY sec.grade_level ASC, sec.section_name ASC");
+      if ($assignments->num_rows > 0):
+        while ($row = $assignments->fetch_assoc()):
+      ?>
+      <tr>
+        <td><?= htmlspecialchars($row['teacher_name']) ?></td>
+        <td><?= htmlspecialchars($row['subject_name']) ?></td>
+        <td><?= htmlspecialchars($row['section_name']) ?></td>
+        <td><?= htmlspecialchars($row['grade_level']) ?></td>
+      </tr>
+      <?php endwhile; else: ?>
+      <tr><td colspan="4" style="text-align:center;">No subject-teacher assignments found.</td></tr>
+      <?php endif; ?>
+    </tbody>
+  </table>
 
-<!-- Adviser Assignments Table -->
-<h5 style="margin-top: 50px; margin-bottom: 10px; text-align:center;">Class Advisers</h5>
-<table border="1" cellpadding="8" cellspacing="0" style="width: 100%; background: #fff; border-collapse: collapse;">
-  <tr style="background:rgb(12, 182, 255); color: white;">
-    <th>Teacher</th>
-    <th>Section</th>
-    <th>Grade Level</th>
-  </tr>
-  <?php
-    $advisers = $conn->query("
-      SELECT f.name AS teacher_name, sec.section_name, sec.grade_level
-      FROM section_advisers sa
-      JOIN faculty f ON sa.teacher_id = f.id
-      JOIN sections sec ON sa.section_id = sec.id
-      ORDER BY sec.grade_level ASC, sec.section_name ASC
-    ");
-    if ($advisers->num_rows > 0):
-      while ($row = $advisers->fetch_assoc()):
-  ?>
-    <tr>
-      <td><?= htmlspecialchars($row['teacher_name']) ?></td>
-      <td><?= htmlspecialchars($row['section_name']) ?></td>
-      <td>Grade <?= htmlspecialchars($row['grade_level']) ?></td>
-    </tr>
-  <?php endwhile; else: ?>
-    <tr><td colspan="3" style="text-align:center;">No adviser assignments found.</td></tr>
-  <?php endif; ?>
-</table>
-
+  <h2>Class Advisers</h2>
+  <table>
+    <thead>
+      <tr><th>Teacher</th><th>Section</th><th>Grade Level</th></tr>
+    </thead>
+    <tbody>
+      <?php
+      $advisers = $conn->query("SELECT f.name AS teacher_name, sec.section_name, sec.grade_level FROM section_advisers sa JOIN faculty f ON sa.teacher_id = f.id JOIN sections sec ON sa.section_id = sec.id ORDER BY sec.grade_level ASC, sec.section_name ASC");
+      if ($advisers->num_rows > 0):
+        while ($row = $advisers->fetch_assoc()):
+      ?>
+      <tr>
+        <td><?= htmlspecialchars($row['teacher_name']) ?></td>
+        <td><?= htmlspecialchars($row['section_name']) ?></td>
+        <td><?= htmlspecialchars($row['grade_level']) ?></td>
+      </tr>
+      <?php endwhile; else: ?>
+      <tr><td colspan="3" style="text-align:center;">No adviser assignments found.</td></tr>
+      <?php endif; ?>
+    </tbody>
+  </table>
 </div>
 
 <!-- Assign Subject Modal -->

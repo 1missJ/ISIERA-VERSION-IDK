@@ -215,6 +215,23 @@ if (!empty($grouped)) {
       text-align: left;
     }
     
+.custom-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  appearance: none;
+  font-size: 14px;
+  margin-bottom: 15px;
+  transition: border-color 0.2s ease;
+}
+
+.custom-select:focus {
+  outline: none;
+  border-color: #2a2185;
+  background-color: #fff;
+}
 
 .btn { padding: 8px 16px; background-color: #2a2185; color: white; border: none; border-radius: 6px; cursor: pointer; transition: background 0.3s ease; }
 .btn:hover { background-color: #1a166a; }
@@ -246,8 +263,7 @@ if (!empty($grouped)) {
 <?php if (isset($error)) echo "<div class='alert error'>$error</div>"; ?>
 
 <form method="POST">
-<label>Student Type</label>
-<select name="student_type" id="student_type" onchange="filterForm()" required>
+<select name="student_type" id="student_type" class="custom-select" onchange="filterForm()" required>
   <option value="">-- Select Type --</option>
   <option value="JHS">JHS</option>
   <option value="SHS">SHS</option>
@@ -312,7 +328,7 @@ if (!empty($grouped)) {
   <form method="GET" style="display: flex; align-items: center; gap: 15px;">
     <div style="display: flex; flex-direction: column; text-align: center;">
       <label for="type" style="font-size: 12px; margin-bottom: 2px;">Student Type</label>
-      <select name="type" id="type" onchange="this.form.submit()" style="padding: 6px 10px;">
+      <select name="type" id="type" class="custom-select" onchange="this.form.submit()">
         <option value="JHS" <?= $studentType === 'JHS' ? 'selected' : '' ?>>JHS</option>
         <option value="SHS" <?= $studentType === 'SHS' ? 'selected' : '' ?>>SHS</option>
       </select>

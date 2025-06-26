@@ -1,32 +1,62 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f8ff; /* light pastel blue */
+    background-color: #f0f8ff;
 }
 
 .student-nav-container {
-    background-color: #111184; /* pastel sky blue */
-    padding: 20px 0;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-evenly; /* ✅ Equal spacing for all nav items */
+    align-items: center;
+    padding: 0 20px;
+    background-color: #0057a3;
+    height: 60px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    flex-wrap: wrap;
 }
 
-
-.student-nav a {
-text-decoration: none;
-font-weight: 600;
-color: whitesmoke;
-font-size: 16px;
-padding: 10px 20px;
-border-radius: 8px;
-transition: background-color 0.2s ease;
-display: flex;
-align-items: center;
-gap: 8px;
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    color: whitesmoke;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    min-width: 100px; /* optional: helps balance widths */
+    justify-content: center;
+    text-align: center;
 }
 
-.student-nav a ion-icon {
-font-size: 18px;
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
+
+.logo img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .student-nav-container {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .nav-item {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
 .portal-content {
     max-width: 900px;
     margin: 40px auto;
@@ -34,26 +64,10 @@ font-size: 18px;
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center; /* ✅ center the text */
 }
 
-.portal-content h2 {
-    margin-top: 0;
-    color: #1565c0;
-}
-
-.logo-container img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-
-/* Responsive */
-@media (max-width: 600px) {
-    .student-nav {
-        gap: 15px;
-        flex-direction: column;
-        align-items: center;
-    }
+ .portal-content {
+    padding: 2rem;
+    text-align: center;
 }

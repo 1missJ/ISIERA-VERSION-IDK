@@ -27,8 +27,21 @@ if (mysqli_num_rows($result) > 0) {
 <?php include('sidebar.php'); ?>
 
 <div class="main-content">
-    <h2>Student Information</h2>
 
+<div class="dropdown-nav">
+  <label for="gradeSelect">Navigate to:</label>
+  <select id="gradeSelect" onchange="showStudents(this.value)">
+    <option value="">-- Select Grade Level --</option>
+    <option value="Grade 7">Grade 7</option>
+    <option value="Grade 8">Grade 8</option>
+    <option value="Grade 9">Grade 9</option>
+    <option value="Grade 10">Grade 10</option>
+    <option value="Grade 11">Grade 11</option>
+    <option value="Grade 12">Grade 12</option>
+  </select>
+</div>
+
+<h2 id="studentHeading" style="display:none;">Student Information</h2>
     <!-- Search Bar -->
     <div class="search-container" style="display:none;">
         <div class="left-search">
@@ -38,19 +51,6 @@ if (mysqli_num_rows($result) > 0) {
             </form>
         </div>
     </div>    
-
-    <!-- Grade Level Boxes Only -->
-    <div class="year-levels">
-        <?php
-        $grades = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
-
-        foreach ($grades as $grade) {
-            echo "<div class='year-box-wrapper'>
-                    <div class='year-box' onclick=\"showStudents('{$grade}')\">{$grade}</div>
-                  </div>";
-        }
-        ?>
-    </div>
 
     <!-- Student Table -->
     <table class="student-table" id="studentTable" style="display:none;">
@@ -144,9 +144,11 @@ function searchStudent() {
 function showStudents(yearLevel) {
     currentGrade = yearLevel.trim().toLowerCase();
 
-    document.querySelector(".year-levels").style.display = "none";
-    document.querySelector(".search-container").style.display = "flex";
+    // Keep dropdown visible
 
+    // Show search bar, heading, and student table
+    document.querySelector(".search-container").style.display = "flex";
+    document.getElementById("studentHeading").style.display = "block";
     document.getElementById("searchInput").value = "";
     document.getElementById("studentTable").style.display = "table";
 

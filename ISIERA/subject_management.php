@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_subject'])) {
     }
 
     th, td {
-      padding: 12px 16px;
+      padding: 16px 26px;
       text-align: left;
       border-bottom: 1px solid #eee;
     }
@@ -215,6 +215,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_subject'])) {
       font-weight: bold;
       cursor: pointer;
     }
+
+    .custom-select {
+  width: 25%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  appearance: none;
+  font-size: 14px;
+  margin-bottom: 15px;
+  transition: border-color 0.2s;
+}
+
+.custom-select:focus {
+  outline: none;
+  border-color: #2a2185;
+  background-color: #fff;
+}
+
   </style>
 </head>
 <body>
@@ -245,16 +264,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_subject'])) {
     <label>Subject Names (separated by comma)</label>
     <input type="text" name="subject_names" placeholder="e.g. Math, Science, Filipino" required />
 
-    <label>Student Type</label>
-    <select name="student_type" required>
-      <option value="">-- Select Type --</option>
-      <option value="JHS">JHS</option>
-      <option value="SHS">SHS</option>
-    </select>
+<label>Student Type</label>
+<select name="student_type" class="custom-select" onchange="toggleStrand(this.value)" required>
+  <option value="">-- Select Type --</option>
+  <option value="JHS">JHS</option>
+  <option value="SHS">SHS</option>
+</select>
 
-    <div id="strand_field" style="display:none;">
+<div id="strand_field" style="display:none;">
   <label>Strand (for SHS only)</label>
-  <select name="strand_id">
+  <select name="strand_id" class="custom-select">
     <option value="">-- Select Strand --</option>
     <?php foreach ($strands as $str): ?>
       <option value="<?= $str['id'] ?>"><?= htmlspecialchars($str['name']) ?></option>

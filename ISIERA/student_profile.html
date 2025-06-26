@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navigation">
+            <ul>
+
+                <li class="brand-logo">
+                    <a href="index.html">
+                        <div class="logo-container">
+                            <img src="assets/imgs/dahs.jpg" alt="TapInTime Logo">
+                        </div>
+                        <span class="title">TapInTime</span>
+                    </a>
+                </li>                    
+                
+                <li>
+                    <a href="dashboard.php">
+                        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="student_verification.php">
+                        <span class="icon"><ion-icon name="checkmark-done-circle-outline"></ion-icon></span>
+                        <span class="title">Student Verification</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="student_details.php">
+                        <span class="icon"><ion-icon name="people-circle-outline"></ion-icon> </span>
+                        <span class="title">Student Details</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="id_generation.php">
+                        <span class="icon"><ion-icon name="card-outline"></ion-icon></span>
+                        <span class="title">ID Generation</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="qr-code-outline"></ion-icon></span>
+                        <span class="title">RFID Assignment</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="school-outline"></ion-icon></span>
+                        <span class="title">Faculty Registration</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="library-outline"></ion-icon></span>
+                        <span class="title">Subject Management</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="stats-chart-outline"></ion-icon></span>
+                        <span class="title">Attendance Monitoring</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="ribbon-outline"></ion-icon></span>
+                        <span class="title">Students Promotion</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+                        <span class="title">Users</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="log-in-outline"></ion-icon></span>
+                        <span class="title">Sign out</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+    <div class="row">
+        <!-- Student Information Section -->
+        <div class="col-md-8">
+            
+            <!-- Profile Image Section (Above Personal Information) -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="profile-pic">
+                        <img src="assets/imgs/default-profile.png" alt="Student ID Picture" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Information Section -->
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h2>Personal Information</h2>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="first_name">First Name:</label>
+                            <input type="text" class="form-control" name="first_name" id="first_name">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="middle_name">Middle Name:</label>
+                            <input type="text" class="form-control" name="middle_name" id="middle_name">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="last_name">Last Name:</label>
+                            <input type="text" class="form-control" name="last_name" id="last_name">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="lrn">LRN:</label>
+                            <input type="text" class="form-control" name="lrn" id="lrn">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="dob">Date of Birth:</label>
+                            <input type="text" class="form-control" name="dob" id="dob">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="gender">Gender:</label>
+                            <input type="text" class="form-control" name="gender" id="gender">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parent/Guardian Information -->
+                <div class="form-section">
+                    <h2>Parent/Guardian Information</h2>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="guardian_name">Guardian Name:</label>
+                            <input type="text" class="form-control" name="guardian_name" id="guardian_name">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="guardian_contact">Guardian Contact:</label>
+                            <input type="text" class="form-control" name="guardian_contact" id="guardian_contact">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="guardian_relationship">Relationship:</label>
+                            <input type="text" class="form-control" name="guardian_relationship" id="guardian_relationship">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Information -->
+                <div class="form-section">
+                    <h2>Academic Information</h2>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="elementary_school">Elementary School:</label>
+                            <input type="text" class="form-control" name="elementary_school" id="elementary_school">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="year_graduated">Year Graduated:</label>
+                            <input type="text" class="form-control" name="year_graduated" id="year_graduated">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Required Documents -->
+                <div class="form-section">
+                    <h2>Required Documents</h2>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="birth_certificate">Birth Certificate:</label>
+                            <input type="text" class="form-control" name="birth_certificate" id="birth_certificate">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="form_137">Form 137:</label>
+                            <input type="text" class="form-control" name="form_137" id="form_137">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="student_signature">Student Signature:</label>
+                            <input type="text" class="form-control" name="student_signature" id="student_signature">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="form-buttons">
+                    <button class="save-btn" type="submit">Save</button>
+                    <button class="close-btn" id="closeBtn" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("closeBtn").addEventListener('click', function() {
+            window.history.back();
+        });
+    </script>
+
+    <!-- Main JS -->
+    <script src="assets/js/main.js"></script>      
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

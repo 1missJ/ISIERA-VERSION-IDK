@@ -32,9 +32,22 @@ if (mysqli_num_rows($result) > 0) {
 <?php include('sidebar.php'); ?>
 
 <div class="main-content">
-    <h2>ID Generation</h2>
 
-    <!-- Search Bar -->
+<div class="dropdown-nav">
+  <label for="gradeSelect">Navigate to:</label>
+  <select id="gradeSelect" onchange="showStudents(this.value)">
+    <option value="">-- Select Grade Level --</option>
+    <option value="Grade 7">Grade 7</option>
+    <option value="Grade 8">Grade 8</option>
+    <option value="Grade 9">Grade 9</option>
+    <option value="Grade 10">Grade 10</option>
+    <option value="Grade 11">Grade 11</option>
+    <option value="Grade 12">Grade 12</option>
+  </select>
+</div>
+
+<h2 id="studentHeading" style="display:none;">ID Generation</h2>
+
     <div class="search-container" style="display:none;">
         <div class="left-search">
             <form id="searchForm" onsubmit="return false;">
@@ -42,20 +55,7 @@ if (mysqli_num_rows($result) > 0) {
                 <button type="submit">Search</button>
             </form>
         </div>
-    </div>    
-
-    <!-- Grade Level Buttons Only -->
-    <div class="year-levels">
-        <?php
-        $grades = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
-
-        foreach ($grades as $grade) {
-            echo "<div class='year-box-wrapper'>
-                    <div class='year-box' onclick=\"showStudents('{$grade}')\">{$grade}</div>
-                  </div>";
-        }
-        ?>
-    </div>
+    </div>  
 
     <!-- Student Table -->
     <table class="student-table" id="studentTable" style="display:none;">
@@ -76,7 +76,7 @@ if (!empty($students)) {
             <td>{$sectionEscaped}</td>
             <td>{$student['student_count']}</td>
             <td>
-                <button class='view-btn' title='View' onclick=\"location.href='id_generate.php?grade_level=" . urlencode($student['grade_level']) . "&section={$sectionUrl}'\">
+<button class='view-btn' title='View' onclick=\"location.href='id_generate.php?gradelevel=" . urlencode($student['grade_level']) . "&section={$sectionUrl}'\">
                     <ion-icon name='eye-outline'></ion-icon>
                 </button>
             </td>
@@ -131,7 +131,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function showStudents(yearLevel) {
     currentGrade = yearLevel.trim().toLowerCase();
-    document.querySelector(".year-levels").style.display = "none";
+
+    // Show heading and search bar
+    document.getElementById("studentHeading").style.display = "block";
     document.querySelector(".search-container").style.display = "flex";
 
     const table = document.getElementById("studentTable");
@@ -146,7 +148,6 @@ function showStudents(yearLevel) {
 
     rows.forEach(row => {
         const grade = row.getAttribute("data-grade")?.trim().toLowerCase();
-
         if (grade === currentGrade) {
             row.style.display = "";
             hasMatch = true;
@@ -161,6 +162,9 @@ function showStudents(yearLevel) {
         newRow.innerHTML = `<td colspan="3">No data available.</td>`;
         tbody.appendChild(newRow);
     }
+
+    document.getElementById("searchInput").value = "";
+    searchStudent();
 }
 
 function redirectToStudentInfo(section) {
