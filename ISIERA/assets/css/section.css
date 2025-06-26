@@ -1,0 +1,90 @@
+.section-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.section-modal.show {
+    display: flex;
+}
+
+
+.section-modal-content {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    animation: sectionFadeIn 0.3s ease-out;
+    position: relative;
+}
+
+.section-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+
+.section-close:hover {
+    color: red;
+}
+
+.section-modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+}
+
+#sectionForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#sectionInput {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+#sectionForm button {
+    padding: 0.75rem;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#sectionForm button:hover {
+    background-color: #3e8e41;
+}
+
+@keyframes sectionFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Verification - TapInTime</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navigation">
+            <ul>
+
+                <li class="brand-logo">
+                    <a href="index.html">
+                        <div class="logo-container">
+                            <img src="assets/imgs/dahs.jpg" alt="TapInTime Logo">
+                        </div>
+                        <span class="title">TapInTime</span>
+                    </a>
+                </li>                    
+                
+                <li>
+                    <a href="index.html">
+                        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="student_verification.html">
+                        <span class="icon"><ion-icon name="checkmark-done-circle-outline"></ion-icon></span>
+                        <span class="title">Student Verification</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="student_details.html">
+                        <span class="icon"><ion-icon name="people-circle-outline"></ion-icon> </span>
+                        <span class="title">Student Details</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="id_generation.html">
+                        <span class="icon"><ion-icon name="card-outline"></ion-icon></span>
+                        <span class="title">ID Generation</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="qr-code-outline"></ion-icon></span>
+                        <span class="title">RFID Assignment</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="school-outline"></ion-icon></span>
+                        <span class="title">Faculty Registration</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="library-outline"></ion-icon></span>
+                        <span class="title">Subject Management</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="stats-chart-outline"></ion-icon></span>
+                        <span class="title">Attendance Monitoring</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="ribbon-outline"></ion-icon></span>
+                        <span class="title">Students Promotion</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+                        <span class="title">Users</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="log-in-outline"></ion-icon></span>
+                        <span class="title">Sign out</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+<div class="main-content">
+    <h2>Student Verification</h2>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search student...">
+        <button onclick="searchStudent()">Search</button>
+    </div>
+
+    <table class="student-table">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Registered Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="studentTableBody">
+            <tr>
+                <td>2025-001</td>
+                <td>Juan Dela Cruz</td>
+                <td>juancruz@email.com</td>
+                <td>Feb 20, 2025</td>
+                <td>
+                    <button class="approve-btn">Approve</button>
+                    <button class="reject-btn">Reject</button>
+                    <button class="view-btn"  onclick="redirectToStudentInfo('${student.id}')">
+                    <ion-icon name="eye-outline"></ion-icon>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>2025-002</td>
+                <td>Maria Santos</td>
+                <td>maria@email.com</td>
+                <td>Feb 19, 2025</td>
+                <td>
+                    <button class="approve-btn">Approve</button>
+                    <button class="reject-btn">Reject</button>
+                    <button class="view-btn" onclick="openModal('2025-002', 'Maria Santos', 'maria@email.com', 'Feb 19, 2025')">
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="studentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>Student Details</h3>
+        <p><strong>Student ID:</strong> <span id="modalStudentID"></span></p>
+        <p><strong>Name:</strong> <span id="modalStudentName"></span></p>
+        <p><strong>Email:</strong> <span id="modalStudentEmail"></span></p>
+        <p><strong>Registered Date:</strong> <span id="modalStudentDate"></span></p>
+    </div>
+</div>
+
+
+<!-- JavaScript for Search Functionality -->
+<script>
+function searchStudent() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("studentTableBody");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1]; // Search by student name
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+        }
+    }
+}
+
+function redirectToStudentInfo(studentId) {
+    window.location.href = `student_profile.html?id=${studentId}`;
+}
+</script>
+
+        <!--Scripts-->
+        <script src="assets/js/main.js"></script>      
+
+        <!--ionicons-->
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</body>
+</html>

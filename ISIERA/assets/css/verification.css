@@ -1,0 +1,125 @@
+h2 {
+    text-align: left;
+    margin-left: 20px;
+    font-family: 'Arial', sans-serif;
+    font-weight: 600;
+    color: #333;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 25px;
+    width: 100%; /* Adjust width to your preference */
+    max-width: 600px; /* Ensures it doesn't become too wide */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    font-family: 'Poppins', sans-serif;
+    margin: auto; /* Ensures centering */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content inside the modal */
+}
+
+
+.modal h2 {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #222;
+}
+
+.modal-content { 
+    background: #fff; 
+    padding: 40px; 
+    width: 90%; /* Increase width */
+    max-width: 900px; /* Set a max width */
+    border-radius: 8px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative; 
+    max-height: 100vh; /* Increase max height */
+    overflow-y: auto;
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-form {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between; 
+    width: 100%;
+    gap: 30px; /* Increase spacing */
+}
+
+.form-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-column label { 
+    font-weight: bold; 
+    text-align: left; 
+    font-size: 16px;
+    color: #444;
+}
+
+input, select { 
+    padding: 12px;
+    margin-top: 5px; 
+    border: 1px solid #bbb; 
+    border-radius: 5px; 
+    width: 100%; 
+    font-size: 15px;
+    background-color: #f9f9f9;
+}
+
+.doc-img { 
+    width: 180px; /* Increase size */
+    height: 180px; 
+    border-radius: 5px; 
+    margin-top: 5px; 
+    border: 1px solid #ddd;
+}
+
+.grid-container { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 20px; 
+    justify-content: center; /* Ensure images are centered */
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+
+.close:hover {
+    color: red;
+}

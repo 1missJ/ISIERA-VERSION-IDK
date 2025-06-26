@@ -1,0 +1,164 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fc;
+}
+
+.subject-manager {
+    margin-left: 400px;
+    padding: 30px;
+    max-width: 1000px;
+    padding-top: 50px;
+}
+
+.card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 40px;
+}
+
+label {
+    font-weight: 600;
+    color: #444;
+    display: block;
+    margin-top: 15px;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-top: 6px;
+    font-size: 15px;
+}
+
+input[type="submit"], .assign-btn {
+    margin-top: 20px;
+    background-color: #1e90ff;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+input[type="submit"]:hover, .assign-btn:hover {
+    background-color: #1c7ed6;
+}
+
+table {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    border-style: solid;
+    border-color:black;
+}
+
+th, td {
+    text-align: left;
+    padding: 10px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background-color: lightskyblue;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .subject-manager {
+        margin-left: 0;
+        padding: 20px;
+    }
+}
+
+.assign-container {
+    max-width: 700px;
+    margin-left: 600px;
+    padding: 25px;
+    border-radius: 10px;
+    background: #f7f7f7;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+    
+}
+.assign-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.assign-container select,
+.assign-container input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.assign-btn {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+.assign-btn:hover {
+    background-color: #388e3c;
+}
+
+.subject-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    color: #fff;
+    background-color: #4CAF50;
+    margin: 5px 8px 5px 0;
+    transition: background-color 0.3s ease;
+    min-width: 140px;
+    box-sizing: border-box;
+}
+
+.view-btn {
+    background-color: #66bb6a;
+}
+
+.subject-btn:hover {
+    background-color: #388e3c;
+}
+
+.view-btn:hover {
+    background-color: #558b2f;
+}
+
+.subject-btn ion-icon {
+    font-size: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.assign-btn {
+    background-color: #9C27B0;
+    color: #fff;
+    padding: 8px 16px;
+    margin-right: 8px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+

@@ -1,0 +1,673 @@
+/*=======Google Fonts========*/
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+* {
+    font-family: 'Ubuntu', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #2a2185;
+    --white: #fff;
+    --gray: #f5f5f5;
+    --black1: #222;
+    --black2: #999;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+/*---------Navigation----*/
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: var(--blue);
+    border-left: 10px solid var(--blue);
+    transition: 0.5s;
+    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.navigation::-webkit-scrollbar {
+    display: none;
+}
+
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.navigation ul li {
+    position: relative;
+    width: 100%;
+    list-style: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.navigation ul li:hover {
+    background-color: var(--white);
+}
+
+.navigation ul li:nth-child(1) {
+    margin-bottom: 40px;
+    pointer-events: none;
+    text-align: center;
+}
+
+.navigation ul li:nth-child(1) .icon img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.navigation ul li a {
+    display: flex;
+    align-items: center; /* Ensures vertical alignment */
+    text-decoration: none;
+    color: var(--white);
+    height: 60px;
+    
+}
+
+.navigation ul li:hover a {
+    color: var(--blue);
+}
+
+.navigation ul li a .icon {
+    min-width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centers the icon */
+}
+
+.navigation ul li a .icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.navigation ul li a .icon ion-icon {
+    font-size: 1.75rem;
+}
+
+.navigation ul li a .title {
+    display: flex;
+    align-items: center; /* Aligns text with icon */
+    padding-left: 10px; /* Adjust for spacing */
+    white-space: nowrap;
+}
+
+/*------curve outside---*/
+.navigation ul li:hover a::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+.navigation ul li:hover a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+.logo-container img {
+    width: 70px; /* Adjust this value as needed */
+    height: 70px; /* Keep it equal to width for a perfect circle */
+    border-radius: 50%;
+    object-fit: cover; /* Ensures the image doesn't get distorted */
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    justify-content: start; 
+    padding-left: 10px; /* Adjust as needed */
+    padding-top: 30px;
+}
+
+.brand-logo .title {
+    font-size: 1.5rem; /* Make the title slightly bigger for emphasis */
+    font-weight: 600; /* Make it bold for better visibility */
+    font-family: 'Poppins', sans-serif; /* Modern and clean font */
+    color: var(--white);
+    margin-left: 10px; /* Space between logo and text */
+    white-space: nowrap;
+}
+
+/*Student Verification design*/
+/* Main Content Styling */
+.main-content {
+    margin-left: 300px; /* Gawing same width ng sidebar */
+    padding: 20px;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    overflow-x: hidden; /* Para hindi lumagpas */
+    width: calc(100% - 300px); /* Para sakto lang sa natitirang space */
+}
+
+/* Page Title */
+.main-content h2{
+        text-align: left;
+        margin-left: 20px;
+        font-family: 'Arial', sans-serif;
+        font-weight: 600;
+        color: #333;
+        font-size: 30px;
+    }
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.search-container input {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.search-container button {
+    padding: 7px 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-container button:hover {
+    background-color: #0056b3;
+}
+
+.left-search {
+    display: flex;
+    gap: 10px;
+}
+
+.right-filter select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    min-width: 160px;
+}
+
+/* Table Styling */
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.student-table td {
+    text-align: center; /* Center-align text in table */
+    vertical-align: middle; /* Ensure vertical alignment */
+    padding: 10px; /* Adjust padding for spacing */
+}
+
+.student-table td button {
+    display: inline-flex; /* Keep buttons in a row */
+    padding: 8px 12px;
+    margin: 2px; /* Space between buttons */
+    border: none;
+    border-radius: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.student-table th, .student-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.student-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.student-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Wrap all buttons in a flex container */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px; /* Space between buttons */
+    margin-left: -100px; /* Moves the buttons slightly to the left */
+}
+
+.action-buttons button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 6px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Verification Button */
+.approve-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.approve-btn:hover {
+    background-color: #218838;
+}
+
+/* Reject Button */
+.reject-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.reject-btn:hover {
+    background-color: #c82333;
+}
+
+/* View Button */
+.view-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.view-btn:hover {
+    background-color: #0056b3;
+}
+
+.view-btn ion-icon {
+    font-size: 16px;
+}
+
+input.form-control {
+    outline: 2px #495057;
+    transition: outline 0.2s ease-in-out;
+}
+
+input.form-control:focus {
+    outline: 2px #495057;
+    box-shadow: none;
+}
+
+
+/*Student details modal in verification */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 1;
+    top: 0;
+    width: 150%;
+    height: 150%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+}
+
+.btn-close {
+    color: red;
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Form Sections */
+.form-section h4 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Form Fields */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: bold; 
+    text-align: left; 
+    font-size: 16px;
+    color: #444;
+}
+
+/* Form Inputs */
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form-group input[type="file"] {
+    width: auto;
+    padding: 5px;
+}
+
+/* Three-column layout for form fields */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.col-md-4 {
+    flex: 1;
+    min-width: 250px; /* Adjust the min-width as needed */
+}
+
+/* Student Profile */
+.id-photo-box {
+    display: flex;
+    padding: 5px;
+}
+
+.id-photo-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.rectangle-img {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    width: 50%; /* Ensures equal width */
+    height: 250px; /* Ensures equal height */
+    justify-content: center;
+}
+
+.document-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 20px;
+    border: 2px solid #ddd; /* Optional border */
+    width: 100%; /* Ensures equal width */
+    height: 250px; /* Ensures equal height */
+    justify-content: center;
+}
+
+.document-box label {
+    position: absolute;
+    top: -20px; /* Adjust this to position the label above the image */
+    left: 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.7); /* Optional: Background for better visibility */
+    padding: 5px 10px; /* Padding for the label */
+}
+
+/* Details Button*/
+.form-buttons {
+display: flex;
+justify-content: flex-end;  /* Align buttons to the right */
+gap: 20px;  /* Space between buttons */
+margin-top: 30px; /* Add some spacing from other elements */
+}
+
+.edit {
+  background-color: #ffc107 !important;
+  color: black !important;
+}
+.archive {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+.unarchive {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+.view {
+  background-color: #3535dc !important;
+  color: white !important;
+}
+
+.save-btn, .close-btn {
+padding: 8px 20px;
+font-size: 12px;
+border-radius: 3px;
+cursor: pointer;
+border: none;
+transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.save-btn {
+background-color: #4CAF50; /* Green for Save */
+color: white;
+}
+
+.save-btn:hover {
+background-color: #45a049;
+transform: scale(1.05);
+}
+
+.close-btn {
+background-color: #f44336; /* Red for Close */
+color: white;
+}
+
+.close-btn:hover {
+background-color: #e53935;
+transform: scale(1.05);
+}
+
+/* ID Generation Button */
+.generate-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #17a2b8; /* Info color similar to Bootstrap's info button */
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.generate-btn:hover {
+    background-color: #138496;
+}
+
+/* Styling for Year Level Selection */
+.year-levels {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.year-levels h3 {
+    width: 100%;
+}
+
+.year-levels .year-box {
+    background: #3498DB;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    flex: 1;
+    min-width: 120px;
+}
+
+.year-levels .year-box:hover {
+    background: #2980B9;
+}
+
+/* Student Promotion */
+.year-box-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 120px;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    z-index: 10;
+    width: 100%;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown div {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+    background: #f9f9f9;
+}
+
+.dropdown div:hover {
+    background: #e0e0e0;
+}
+
+.year-box-wrapper:hover .dropdown {
+    display: block;
+}
+
+.actions-header .header-content {
+  display: flex;
+  justify-content: space-between; /* pushes text left, icon right */
+  align-items: center;
+  width: 100%;
+}
+
+.actions-header .header-icon {
+  font-size: 18px;
+  color: #f9f9f9; /* or whatever fits your theme */
+  cursor: pointer;
+}
+
+/* Dropdown styles */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  min-width: 110px;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #333;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.dropdown-item:hover {
+background-color: #f0f0f0;
+}
+
+.promote-btn {
+    position: fixed;
+    right: 20px;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.promote-btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-promote {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-left: 8px; /* optional spacing after View button */
+}
+
+.btn-promotes:hover {
+    background-color: #0056b3;
+}

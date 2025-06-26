@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Promotion</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li class="brand-logo">
+                    <a href="#">
+                        <div class="logo-container">
+                            <img src="assets/imgs/logo.png">
+                        </div>
+                        <span class="title">TapTrack</span>
+                    </a>
+                </li>                    
+                
+                <li>
+                    <a href="dashboard.php">
+                        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="student_verification.php">
+                        <span class="icon"><ion-icon name="checkmark-done-circle-outline"></ion-icon></span>
+                        <span class="title">Student Verification</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="student_details.php">
+                        <span class="icon"><ion-icon name="people-circle-outline"></ion-icon> </span>
+                        <span class="title">Student Information</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="id_generation.php">
+                        <span class="icon"><ion-icon name="card-outline"></ion-icon></span>
+                        <span class="title">ID Generation with RFID</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="faculty_registration.php">
+                        <span class="icon"><ion-icon name="school-outline"></ion-icon></span>
+                        <span class="title">Faculty Registration</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="subject_management.php">
+                        <span class="icon"><ion-icon name="library-outline"></ion-icon></span>
+                        <span class="title">Subject Management</span>
+                    </a>
+                </li>
+
+                <li style="display: none;">
+                    <a href="enrollment_admin.html">
+                        <span class="icon"><ion-icon name="newspaper-outline"></ion-icon></span>
+                        <span class="title">Enrollment</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="attendance_monitoring.html">
+                        <span class="icon"><ion-icon name="stats-chart-outline"></ion-icon></span>
+                        <span class="title">Attendance Monitoring</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="student_promotion.php">
+                        <span class="icon"><ion-icon name="ribbon-outline"></ion-icon></span>
+                        <span class="title">Students Promotion</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="user.php">
+                        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+                        <span class="title">Users</span>
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="index.php">
+                        <span class="icon"><ion-icon name="log-in-outline"></ion-icon></span>
+                        <span class="title">Sign out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2>Student List</h2>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search by LRN or Name..." onkeypress="handleKeyPress(event)">
+            <button onclick="searchStudent()">Search</button>            
+        </div>
+
+
+        <!-- Student Table -->
+        <table class="student-table" id="studentTable">
+            <thead>
+                <tr>
+                    <th>LRN</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                <!-- Sample data for Grade 7 -->
+                <tr>
+                    <td>123456789120</td>
+                    <td>Emily Johnson</td>
+                    <td>
+                        <button class="view-btn" onclick="viewAttendance('123456789120')">
+                            <ion-icon name='eye-outline'></ion-icon>
+                        </button>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>453467890986</td>
+                    <td>Jane Smith</td>
+                    <td>
+                        <button class="view-btn" onclick="viewAttendance('453467890986')">
+                            <ion-icon name='eye-outline'></ion-icon>
+                        </button>  
+                    </td>
+                </tr>  
+                <tr>
+                    <td>78467890986</td>
+                    <td>John Doe</td>
+                    <td>
+                        <button class="view-btn" onclick="viewAttendance('78467890986')">
+                            <ion-icon name='eye-outline'></ion-icon>
+                        </button>  
+                    </td>
+                </tr>  
+                <tr>
+                    <td>775894020011</td>
+                    <td>Michael Lee</td>
+                    <td>
+                        <button class="view-btn" onclick="viewAttendance('775894020011')">
+                            <ion-icon name='eye-outline'></ion-icon>
+                        </button>  
+                    </td>
+                </tr>  
+                <tr>
+                    <td>567829304568</td>
+                    <td>Sarah Davis</td>
+                    <td>
+                        <button class="view-btn" onclick="viewAttendance('567829304568')">
+                            <ion-icon name='eye-outline'></ion-icon>
+                        </button>  
+                    </td>
+                </tr>               
+            </tbody>
+        </table>
+
+
+    <!-- JavaScript -->
+    <script>
+function searchStudent() {
+    const input = document.getElementById("searchInput");
+    const filter = input.value.toUpperCase();
+    const table = document.getElementById("studentTableBody");
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < tr.length; i++) {
+        const lrnCell = tr[i].getElementsByTagName("td")[0]; // LRN
+        const nameCell = tr[i].getElementsByTagName("td")[1]; // Name
+
+        if (lrnCell && nameCell) {
+            const lrnText = lrnCell.textContent || lrnCell.innerText;
+            const nameText = nameCell.textContent || nameCell.innerText;
+
+            if (
+                lrnText.toUpperCase().includes(filter) ||
+                nameText.toUpperCase().includes(filter)
+            ) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        searchStudent();
+    }
+}
+
+    function viewAttendance(lrn) {
+        window.location.href = 'students_attendance.html?lrn=' + lrn;
+    }
+
+    </script>
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

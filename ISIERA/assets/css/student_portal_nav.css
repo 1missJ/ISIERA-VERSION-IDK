@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f8ff; /* light pastel blue */
+}
+
+.student-nav-container {
+    background-color: #111184; /* pastel sky blue */
+    padding: 20px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+
+.student-nav a {
+text-decoration: none;
+font-weight: 600;
+color: whitesmoke;
+font-size: 16px;
+padding: 10px 20px;
+border-radius: 8px;
+transition: background-color 0.2s ease;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.student-nav a ion-icon {
+font-size: 18px;
+}
+.portal-content {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.portal-content h2 {
+    margin-top: 0;
+    color: #1565c0;
+}
+
+.logo-container img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
+/* Responsive */
+@media (max-width: 600px) {
+    .student-nav {
+        gap: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+}

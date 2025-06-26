@@ -1,0 +1,92 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fc;
+    margin: 0;
+    padding: 0;
+}
+
+.faculty-party {
+    margin-left: 280px;
+    padding: 30px;
+    max-width: 1000px;
+}
+
+.faculty-party h1, .faculty-party h2 {
+    color: #2f3542;
+    margin-bottom: 20px;
+}
+
+.faculty-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 40px;
+}
+
+.faculty-card label {
+    font-weight: 600;
+    color: #444;
+    display: block;
+    margin-top: 15px;
+}
+
+.faculty-card input[type="text"],
+.faculty-card input[type="email"],
+.faculty-card input[type="date"] {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-top: 6px;
+    font-size: 15px;
+}
+
+.faculty-card input[type="submit"] {
+    margin-top: 25px;
+    background-color: #1e90ff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.faculty-card input[type="submit"]:hover {
+    background-color: #1c7ed6;
+}
+
+.faculty-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.faculty-table th,
+.faculty-table td {
+    text-align: left;
+    padding: 14px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.faculty-table th {
+    background-color: #f1f3f5;
+    color: #333;
+}
+
+.faculty-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    .faculty-party {
+        margin-left: 0;
+        padding: 20px;
+    }
+}

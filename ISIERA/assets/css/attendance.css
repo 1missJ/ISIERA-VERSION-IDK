@@ -1,0 +1,160 @@
+.center-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.center-column span {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+}
+
+.info-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.info-line label {
+    margin-right: 5px;
+}
+
+.info-line span {
+    white-space: nowrap;
+}
+select, input[type="date"], input[type="month"] {
+padding: 8px 10px;
+font-size: 15px;
+border-radius: 5px;
+border: 1px solid #ccc;
+width: 200px;
+text-align: center;
+font-weight: bold;
+}
+
+h2 {
+    font-size: 36px;
+text-align: center;
+margin: 0 auto;
+width: fit-content;
+position: relative;
+left: 50%;
+transform: translateX(-50%);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: #007bff;
+    color: white;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.no-data {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+}
+
+.present {
+    color: green;
+    font-weight: bold;
+}
+
+.absent {
+    color: red;
+    font-weight: bold;
+}
+
+.export-buttons-fixed {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.export-buttons-fixed select {
+    appearance: none;
+    background-color: #f0f0f0;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 90px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+/** Buttons **/
+.report-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #dc3545;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.report-btn:hover {
+    background-color: #c82333;
+}
+
+.student-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #ffc107;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.student-btn:hover {
+    background-color: #e0a800;
+}
+
+.views-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #3535dc;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.views-btn:hover {
+    color: #0056b3;
+}
