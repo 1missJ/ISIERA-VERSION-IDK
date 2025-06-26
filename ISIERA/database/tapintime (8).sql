@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 25, 2025 at 07:35 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Jun 26, 2025 at 02:27 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,14 +35,6 @@ CREATE TABLE `approved_students_mobile` (
   `student_type` varchar(50) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `approved_students_mobile`
---
-
-INSERT INTO `approved_students_mobile` (`id`, `name`, `section`, `grade_level`, `student_type`, `student_id`) VALUES
-(0, 'Yadan, Marvita', 'Mangga', 'Grade 7', 'Regular Student', 116),
-(117, NULL, 'Mangga', 'Grade 7', 'Regular Student', NULL);
 
 -- --------------------------------------------------------
 
@@ -83,50 +75,6 @@ CREATE TABLE `archived_students` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `assign`
---
-
-CREATE TABLE `assign` (
-  `id` int(11) NOT NULL,
-  `teacher_id` int(11) NOT NULL,
-  `subject_id` int(11) NOT NULL,
-  `grade_level` int(11) NOT NULL,
-  `section` varchar(100) NOT NULL,
-  `assigned_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `student_type` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `assigned_grade_subjects`
---
-
-CREATE TABLE `assigned_grade_subjects` (
-  `id` int(11) NOT NULL,
-  `subject_id` int(11) NOT NULL,
-  `student_type` varchar(10) NOT NULL,
-  `grade_level` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `assigned_subjects`
---
-
-CREATE TABLE `assigned_subjects` (
-  `id` int(11) NOT NULL,
-  `subject_id` int(11) NOT NULL,
-  `teacher_id` int(11) NOT NULL,
-  `student_type` enum('Regular','STI','Both') NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `enrollments`
 --
 
@@ -158,9 +106,8 @@ CREATE TABLE `faculty` (
 --
 
 INSERT INTO `faculty` (`id`, `teacher_id`, `name`, `email`, `contact`, `dob`, `password`) VALUES
-(1, '252480', 'Kha', 'jaylinfernandez03@gmail.com', '123456782', '2025-04-12', '$2y$10$SsufId.xA5SNjxL.4IIFnOzDo5ybaY7loQdu/YAhXX2h7IpS1VnSe'),
-(2, '251413', 'Mar', 'marvita.2003123@gmail.com', '09789643345', '2025-06-10', '$2y$10$tEZXLva9ZivQN1RGPIWa7.Cpp2nN7vaHYzZ5TBflQqzefFYVDn7lu'),
-(3, '257457', 'Yadan', 'ataggatanel2004@outlook.com', '09789643345', '2025-06-05', '$2y$10$Yhz9BtljjxeNaspC0PcFfe.7d6WMfd9nOZkoQGELhZCkZKL.js4QW');
+(4, '250511', 'Karen Soriano', 'Haa@gmail.com', '12345678123', '2025-06-25', '$2y$10$basnU64.B8j4uazWaYQumOl4ug9J.J/VkP1SIcogjQ/5GgABo63KC'),
+(5, '251320', 'Jologska', 'jaylinfernandez03@gmail.com', '12345678123', '2025-06-13', '$2y$10$5DAJVFz6VrJwyjqjXrMVjOS6lhYcEO/Ku8KcAdTqV7oYWcVwV2DK6');
 
 -- --------------------------------------------------------
 
@@ -226,6 +173,66 @@ CREATE TABLE `school_years` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sections`
+--
+
+CREATE TABLE `sections` (
+  `id` int(11) NOT NULL,
+  `section_name` varchar(100) NOT NULL,
+  `student_type` enum('JHS','SHS') NOT NULL,
+  `grade_level` varchar(20) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sections`
+--
+
+INSERT INTO `sections` (`id`, `section_name`, `student_type`, `grade_level`, `created_at`) VALUES
+(4, 'Nakopo', 'JHS', 'Grade 10', '2025-06-26 10:33:07'),
+(5, 'Mangga', 'SHS', 'Grade 9', '2025-06-26 12:24:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `section_advisers`
+--
+
+CREATE TABLE `section_advisers` (
+  `id` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `section_advisers`
+--
+
+INSERT INTO `section_advisers` (`id`, `teacher_id`, `section_id`) VALUES
+(1, 4, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `strands`
+--
+
+CREATE TABLE `strands` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `strands`
+--
+
+INSERT INTO `strands` (`id`, `name`) VALUES
+(3, 'ABM'),
+(4, 'HUMMS');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `students`
 --
 
@@ -254,12 +261,20 @@ CREATE TABLE `students` (
   `section` varchar(50) DEFAULT NULL,
   `school_year` varchar(9) NOT NULL,
   `grade_level` varchar(20) DEFAULT NULL,
-  `student_type` enum('JHS','SHS') NOT NULL,
+  `student_type` enum('Regular Student','STI Student') DEFAULT NULL,
   `verified_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `rfid` varchar(50) DEFAULT NULL,
   `mobile_verified` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`id`, `first_name`, `middle_name`, `last_name`, `lrn`, `date_of_birth`, `gender`, `citizenship`, `address`, `contact_number`, `email`, `guardian_name`, `guardian_contact`, `guardian_address`, `guardian_relationship`, `elementary_school`, `year_graduated`, `birth_certificate`, `id_photo`, `good_moral`, `student_signature`, `section`, `school_year`, `grade_level`, `student_type`, `verified_at`, `created_at`, `rfid`, `mobile_verified`) VALUES
+(118, 'Jaylin', 'D', 'Fernandez', '103109590012', '2025-06-28', 'Female', 'Filipino', 'Pilig Alto Cabagan Isabela', '12345678912', 'Ha@gmail.com', 'Patricia Anne D. Corpuz', '12345678', 'Pilig Alto Cabagan Isabela', 'Mother', 'Catabayungan', '2016', 'uploads/685b94bc9c3c7_birth_certificate.png', 'uploads/685b94bc9ccf6_id_photo.jpg', 'uploads/685b94bc9d0d8_good_moral.png', 'uploads/685b94bc9d675_student_signature.png', 'Mabini', '2025-2027', 'Grade 9', '', '2025-06-25 06:19:11', '2025-06-25 06:19:11', NULL, 0),
+(119, 'Patricia', 'Anne D.', 'Corpuz', '103109590014', '2025-06-05', 'Male', 'Filipino', 'Pilig Alto Cabagan Isabela', '12345678912', 'corpuzpatriciaanee01@gmail.com', 'Patricia Anne D. Corpuz', '12345678', 'Pilig Alto Cabagan Isabela', 'Mother', 'Catabayungan', '2016', 'uploads/685d22c78b980_birth_certificate.jpg', 'uploads/685d22c78c478_id_photo.jpg', 'uploads/685d22c78d750_good_moral.jpg', 'uploads/685d22c78e2ba_student_signature.jpg', 'Nakopo', '2024-2025', 'Grade 10', '', '2025-06-26 10:37:23', '2025-06-26 10:37:23', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -270,30 +285,99 @@ CREATE TABLE `students` (
 CREATE TABLE `subjects` (
   `id` int(11) NOT NULL,
   `subject_name` varchar(255) NOT NULL,
+  `student_type` varchar(150) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `student_type` enum('JHS','SHS','Both') NOT NULL DEFAULT 'JHS'
+  `strand_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `subjects`
 --
 
-INSERT INTO `subjects` (`id`, `subject_name`, `created_at`, `student_type`) VALUES
-(18, 'P.e', '2025-06-25 05:20:40', 'Both'),
-(22, 'P.e', '2025-06-25 05:25:38', 'SHS'),
-(23, 'English', '2025-06-25 05:25:56', 'JHS');
+INSERT INTO `subjects` (`id`, `subject_name`, `student_type`, `created_at`, `strand_id`) VALUES
+(48, 'Business Math', 'SHS', '2025-06-26 03:12:07', 3),
+(49, 'Principles of Marketing', 'SHS', '2025-06-26 03:12:07', 3),
+(53, 'Creative Nonfiction', 'SHS', '2025-06-26 03:12:26', 4),
+(54, 'Disciplines and Ideas in Social Sciences', 'SHS', '2025-06-26 03:12:26', 4),
+(55, 'Philippine Politics and Governance', 'SHS', '2025-06-26 03:12:26', 4),
+(56, 'Introduction to World Religions', 'SHS', '2025-06-26 03:12:26', 4),
+(57, 'Trends', 'SHS', '2025-06-26 03:12:26', 4),
+(60, 'Reading and Writing', 'SHS', '2025-06-26 03:12:40', NULL),
+(62, 'General Mathematics', 'SHS', '2025-06-26 03:12:40', NULL),
+(63, '21st Century Literature from the Philippines and the World', 'SHS', '2025-06-26 03:12:40', NULL),
+(64, 'Filipino', 'JHS', '2025-06-26 04:24:00', NULL),
+(65, 'P.e', 'JHS', '2025-06-26 04:24:00', NULL),
+(66, 'Science', 'JHS', '2025-06-26 12:24:12', NULL),
+(67, 'English', 'JHS', '2025-06-26 12:24:12', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `subject_teacher`
+-- Table structure for table `subject_grade_strand_assignments`
 --
 
-CREATE TABLE `subject_teacher` (
+CREATE TABLE `subject_grade_strand_assignments` (
   `id` int(11) NOT NULL,
   `subject_id` int(11) NOT NULL,
-  `teacher_id` int(11) NOT NULL
+  `grade_level` varchar(10) NOT NULL,
+  `strand_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `subject_grade_strand_assignments`
+--
+
+INSERT INTO `subject_grade_strand_assignments` (`id`, `subject_id`, `grade_level`, `strand_id`) VALUES
+(3, 42, '11', 2),
+(4, 43, '11', 2),
+(1, 45, '11', 2),
+(5, 46, '11', 2),
+(2, 47, '11', 2),
+(9, 48, '11', 3),
+(15, 49, '11', 3),
+(10, 50, '11', 3),
+(7, 51, '11', 3),
+(8, 52, '11', 3),
+(18, 53, '11', 4),
+(19, 54, '11', 4),
+(13, 55, '11', 3),
+(21, 55, '11', 4),
+(20, 56, '11', 4),
+(22, 57, '11', 4),
+(11, 58, '11', 3),
+(12, 59, '11', 3),
+(14, 61, '11', 3),
+(6, 63, '11', 3),
+(17, 63, '11', 4),
+(30, 64, '7', NULL),
+(16, 64, '8', NULL),
+(34, 64, '8', NULL),
+(31, 65, '7', NULL),
+(35, 65, '8', NULL),
+(32, 66, '7', NULL),
+(36, 66, '8', NULL),
+(29, 67, '7', NULL),
+(33, 67, '8', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `teacher_subjects`
+--
+
+CREATE TABLE `teacher_subjects` (
+  `id` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `teacher_subjects`
+--
+
+INSERT INTO `teacher_subjects` (`id`, `teacher_id`, `subject_id`, `section_id`) VALUES
+(1, 5, 48, 4);
 
 -- --------------------------------------------------------
 
@@ -334,14 +418,6 @@ ALTER TABLE `archived_students`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `assign`
---
-ALTER TABLE `assign`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `teacher_id` (`teacher_id`),
-  ADD KEY `subject_id` (`subject_id`);
-
---
 -- Indexes for table `enrollments`
 --
 ALTER TABLE `enrollments`
@@ -371,6 +447,27 @@ ALTER TABLE `rejected_students`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `sections`
+--
+ALTER TABLE `sections`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `section_name` (`section_name`);
+
+--
+-- Indexes for table `section_advisers`
+--
+ALTER TABLE `section_advisers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `section_id` (`section_id`);
+
+--
+-- Indexes for table `strands`
+--
+ALTER TABLE `strands`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
@@ -383,7 +480,22 @@ ALTER TABLE `students`
 -- Indexes for table `subjects`
 --
 ALTER TABLE `subjects`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_strand` (`strand_id`);
+
+--
+-- Indexes for table `subject_grade_strand_assignments`
+--
+ALTER TABLE `subject_grade_strand_assignments`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `subject_id` (`subject_id`,`grade_level`,`strand_id`);
+
+--
+-- Indexes for table `teacher_subjects`
+--
+ALTER TABLE `teacher_subjects`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `teacher_id` (`teacher_id`,`subject_id`,`section_id`);
 
 --
 -- Indexes for table `users`
@@ -400,13 +512,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `archived_students`
 --
 ALTER TABLE `archived_students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
-
---
--- AUTO_INCREMENT for table `assign`
---
-ALTER TABLE `assign`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `enrollments`
@@ -418,25 +524,55 @@ ALTER TABLE `enrollments`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pending_students`
 --
 ALTER TABLE `pending_students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+
+--
+-- AUTO_INCREMENT for table `sections`
+--
+ALTER TABLE `sections`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `section_advisers`
+--
+ALTER TABLE `section_advisers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `strands`
+--
+ALTER TABLE `strands`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 
 --
 -- AUTO_INCREMENT for table `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+
+--
+-- AUTO_INCREMENT for table `subject_grade_strand_assignments`
+--
+ALTER TABLE `subject_grade_strand_assignments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT for table `teacher_subjects`
+--
+ALTER TABLE `teacher_subjects`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -449,18 +585,17 @@ ALTER TABLE `users`
 --
 
 --
--- Constraints for table `assign`
---
-ALTER TABLE `assign`
-  ADD CONSTRAINT `assign_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `faculty` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `assign_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `enrollments`
 --
 ALTER TABLE `enrollments`
   ADD CONSTRAINT `enrollments_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
   ADD CONSTRAINT `enrollments_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`);
+
+--
+-- Constraints for table `subjects`
+--
+ALTER TABLE `subjects`
+  ADD CONSTRAINT `fk_strand` FOREIGN KEY (`strand_id`) REFERENCES `strands` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

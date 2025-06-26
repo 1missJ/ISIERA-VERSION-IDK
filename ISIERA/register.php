@@ -2,6 +2,7 @@
 session_start();
 include 'db_connection.php';
 
+
 $error = "";
 $success = "";
 
@@ -127,6 +128,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         $check_stmt->close();
     }
 }
+
+
+if (isset($_GET['grade_level'])) {
+    $grade_level = $_GET['grade_level']; // e.g., "Grade 7"
+
+    $stmt = $conn->prepare("SELECT section_name FROM sections WHERE grade_level = ?");
+    $stmt->bind_param("s", $grade_level);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $sections = [];
+    while ($row = $result->fetch_assoc()) {
+        $sections[] = $row;
+    }
+
+    echo json_encode($sections);
+    exit;
+}
+
 ?>
 
 
@@ -192,20 +212,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <input type="text" name="section" class="form-control" placeholder="Section" required>
-                </div>
+    <select name="grade_level" id="grade_level" class="form-control" required>
+        <option value="">Select Grade Level</option>
+        <option value="Grade 7">Grade 7</option>
+        <option value="Grade 8">Grade 8</option>
+        <option value="Grade 9">Grade 9</option>
+        <option value="Grade 10">Grade 10</option>
+        <option value="Grade 11">Grade 11</option>
+        <option value="Grade 12">Grade 12</option>
+    </select>
+</div>
 
-                <div class="col-md-4 mb-3">
-                    <select name="grade_level" class="form-control" required>
-                        <option value="">Grade Level</option>
-                        <option value="Grade 7">Grade 7</option>
-                        <option value="Grade 8">Grade 8</option>
-                        <option value="Grade 9">Grade 9</option>
-                        <option value="Grade 10">Grade 10</option>
-                        <option value="Grade 11">Grade 11</option>
-                        <option value="Grade 12">Grade 12</option>
-                    </select>
-                </div>
+<div class="col-md-4 mb-3">
+    <select name="section" id="section" class="form-control" required>
+        <option value="">Select Section</option>
+    </select>
+</div>
+
 
                 <div class="col-md-4 mb-3">
                     <input type="text" name="school_year" id="school_year" class="form-control" placeholder="School Year" required oninput="updateSchoolYear()">
@@ -287,6 +310,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
                 document.getElementById('school_year').addEventListener('input', autoUpdateSchoolYear);
                 });
         </script>
+
+        <script>
+document.getElementById('grade_level').addEventListener('change', function () {
+    const grade = this.value;
+    const sectionDropdown = document.getElementById('section');
+
+    sectionDropdown.innerHTML = '<option value="">Loading...</option>';
+
+    fetch('register.php?grade_level=' + encodeURIComponent(grade))
+        .then(response => response.json())
+        .then(data => {
+            sectionDropdown.innerHTML = '<option value="">Select Section</option>';
+            if (data.length > 0) {
+                data.forEach(section => {
+                    const opt = document.createElement('option');
+                    opt.value = section.section_name;
+                    opt.textContent = section.section_name;
+                    sectionDropdown.appendChild(opt);
+                });
+            } else {
+                sectionDropdown.innerHTML = '<option value="">No sections available</option>';
+            }
+        })
+        .catch(error => {
+            sectionDropdown.innerHTML = '<option value="">Error loading sections</option>';
+            console.error('Error:', error);
+        });
+});
+</script>
 
 
     </div>
