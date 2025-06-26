@@ -15,12 +15,31 @@ $student_count = $conn->query("SELECT COUNT(*) as total FROM students")->fetch_a
 
 // Fetch ALL recent activity
 $recent_query = $conn->query("
-    SELECT f.name as teacher, s.subject_name, a.created_at
-    FROM assign a 
-    JOIN faculty f ON a.teacher_id = f.id 
-    JOIN subjects s ON a.subject_id = s.id 
-    ORDER BY a.created_at DESC
+    SELECT 'Subject Assigned' AS activity_type, f.name AS actor, s.subject_name AS detail, NULL as created_at
+    FROM teacher_subjects ts
+    JOIN faculty f ON ts.teacher_id = f.id
+    JOIN subjects s ON ts.subject_id = s.id
+
+    UNION
+
+    SELECT 'Section Adviser Assigned', f.name, sc.section_name, NULL
+    FROM section_advisers sa
+    JOIN faculty f ON sa.teacher_id = f.id
+    JOIN sections sc ON sa.section_id = sc.id
+
+    UNION
+
+    SELECT 'New Student Registered', CONCAT(first_name, ' ', last_name), '' as detail, NULL
+    FROM students
+
+    UNION
+
+    SELECT 'Student Pending Approval', CONCAT(first_name, ' ', last_name), '' as detail, NULL
+    FROM pending_students
+
+    LIMIT 10
 ");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -168,14 +187,22 @@ $recent_query = $conn->query("
     <div class="recent-activity">
         <h2>📌 Recent Activity</h2>
         <ul>
-            <?php if ($recent_query->num_rows > 0): ?>
-                <?php while ($activity = $recent_query->fetch_assoc()): ?>
-                    <li>👨‍🏫 <?= htmlspecialchars($activity['teacher']) ?> assigned to <strong><?= htmlspecialchars($activity['subject_name']) ?></strong> on <em><?= date('F j, Y - g:i A', strtotime($activity['created_at'])) ?></em></li>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <li>No recent activity available.</li>
+<?php if ($recent_query && $recent_query->num_rows > 0): ?>
+    <?php while ($row = $recent_query->fetch_assoc()): ?>
+        <li>
+            📌 <?= htmlspecialchars($row['activity_type']) ?>:
+            <strong><?= htmlspecialchars($row['actor']) ?></strong>
+            <?= !empty($row['detail']) ? ' ➔ <em>' . htmlspecialchars($row['detail']) . '</em>' : '' ?>
+            <?php if (!empty($row['created_at'])): ?>
+                <br><small>🕒 <?= date('F j, Y - g:i A', strtotime($row['created_at'])) ?></small>
             <?php endif; ?>
-        </ul>
+        </li>
+    <?php endwhile; ?>
+<?php else: ?>
+    <li>No recent activity available.</li>
+<?php endif; ?>
+</ul>
+
     </div>
 </div>
 
