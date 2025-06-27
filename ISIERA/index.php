@@ -5,8 +5,8 @@ include 'db_connection.php';
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']); // LRN or Teacher ID or username
-    $password = trim($_POST['password']); // Birthday (MMDDYYYY) or password
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
     if (preg_match('/^\d{12}$/', $username)) {
         // 🌟 Student login
@@ -37,39 +37,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt->close();
     } else {
-        // 🌟 Teacher login (Teacher ID and Birthday)
-$stmt = $conn->prepare("SELECT id, teacher_id, dob, name FROM faculty WHERE teacher_id = ?");
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
+        // 🌟 Teacher login (check if adviser)
+        $stmt = $conn->prepare("SELECT f.id, f.teacher_id, f.dob, f.name 
+                                FROM faculty f
+                                JOIN section_advisers sa ON sa.teacher_id = f.id
+                                WHERE f.teacher_id = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-if ($result->num_rows === 1) {
-    $teacher = $result->fetch_assoc();
-    $dob_db = $teacher['dob'];
-    $dob_formatted = date("mdY", strtotime($dob_db));
+        if ($result->num_rows === 1) {
+            $teacher = $result->fetch_assoc();
+            $dob_db = $teacher['dob'];
+            $dob_formatted = date("mdY", strtotime($dob_db));
 
-    if (trim($password) === trim($dob_formatted)) {
-        $_SESSION['teacher_id'] = $teacher['id'];
-        $_SESSION['teacher_name'] = $teacher['name'];
-        $_SESSION['just_logged_in'] = true;
+            if ($password === $dob_formatted) {
+                $_SESSION['teacher_id'] = $teacher['id'];
+                $_SESSION['teacher_name'] = $teacher['name'];
+                $_SESSION['just_logged_in'] = true;
 
-        // ✅ Redirect to adviser dashboard
-        header("Location: adviser_dashboard.php");
-        exit();
-    } else {
-        $error = "Invalid Teacher ID or birthday!";
-    }
-
-$stmt->close();
-
+                header("Location: adviser_dashboard.php");
+                exit();
+            } else {
+                $error = "Invalid Teacher ID or birthday!";
+            }
         } else {
-            // 🌟 System user login (admin, counselor, etc.)
+            // 🌟 System user login (admin/counselor)
             $stmt = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ?");
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
 
-            if ($result->num_rows == 1) {
+            if ($result->num_rows === 1) {
                 $user = $result->fetch_assoc();
 
                 if (password_verify($password, $user['password'])) {
@@ -89,13 +88,14 @@ $stmt->close();
             } else {
                 $error = "Invalid username or password!";
             }
-
-            $stmt->close();
         }
+
+        $stmt->close();
     }
 
     $conn->close();
 }
+
 ?>
 
 <!DOCTYPE html>

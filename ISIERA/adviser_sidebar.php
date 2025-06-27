@@ -11,7 +11,7 @@
             </li>                    
 
             <li>
-                <a href="student_verification.php">
+                <a href="adviser_student_verification.php">
                     <span class="icon"><ion-icon name="checkmark-done-circle-outline"></ion-icon></span>
                     <span class="title">Student Verification</span>
                 </a>

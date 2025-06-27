@@ -60,7 +60,8 @@ $userRole = $_SESSION['user_role'] ?? ''; // Default to empty if not set
                 <li>
                     <a href="subject_management.php">
                         <span class="icon"><ion-icon name="library-outline"></ion-icon></span>
-                        <span class="title">Subject Management</span>
+                        <span class="title">Subjects & Sections</span>
+
                     </a>
                 </li>
 

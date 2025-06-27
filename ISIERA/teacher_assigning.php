@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_adviser'])) {
   <button class="add-btn" onclick="openModal('subjectModal')">+ Assign Subject to Teacher</button>
   <button class="add-btn" onclick="openModal('adviserModal')">+ Assign Adviser to Section</button>
   
-  <h2>Subject Teacher Assignments</h2>
+  <h5 style="margin-top: 30px; margin-bottom: 10px; text-align:center;">Subject Teacher Assignments</h5>
   <table>
     <thead>
       <tr><th>Teacher</th><th>Subject</th><th>Section</th><th>Grade Level</th></tr>
@@ -206,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_adviser'])) {
     </tbody>
   </table>
 
-  <h2>Class Advisers</h2>
+  <h5 style="margin-top: 50px; margin-bottom: 10px; text-align:center;">Class Advisers</h5>
   <table>
     <thead>
       <tr><th>Teacher</th><th>Section</th><th>Grade Level</th></tr>

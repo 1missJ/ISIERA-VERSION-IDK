@@ -1,6 +1,14 @@
 <?php
-// Ipasok ang database connection
+session_start(); // ← KAILANGAN ITO MUNA
 include 'db_connection.php'; 
+
+// Get the teacher_id from session
+$teacher_id = $_SESSION['teacher_id'] ?? null;
+
+if (!$teacher_id) {
+    // Optional: Redirect or show error if not logged in properly
+    die("Unauthorized access. Please log in.");
+}
 
 // Helper function to format names as "LastName, FirstName M."
 function formatName($first, $middle, $last) {
@@ -15,15 +23,20 @@ function formatName($first, $middle, $last) {
     return "{$lastName}, {$firstName} {$middleInitial}";
 }
 
-// Query para kunin ang mga pending students, ordered by registered date (newest first)
-$sql = "SELECT ps.*, s.section_name 
+// Get students only in sections assigned to this teacher
+$sql = "SELECT ps.*, s.section_name
         FROM pending_students ps
-        LEFT JOIN sections s ON ps.section = s.section_name 
+        JOIN sections s ON ps.section = s.section_name
+        JOIN section_advisers sa ON sa.section_id = s.id
+        WHERE sa.teacher_id = ?
         ORDER BY ps.created_at DESC";
 
-$result = $conn->query($sql); // ✅ ADD THIS LINE TO EXECUTE THE QUERY
-
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $teacher_id);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +51,7 @@ $result = $conn->query($sql); // ✅ ADD THIS LINE TO EXECUTE THE QUERY
 
 <body>
     <!-- Include Sidebar -->
-    <?php include('sidebar.php'); ?>
+    <?php include('adviser_sidebar.php'); ?>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -73,7 +86,7 @@ $result = $conn->query($sql); // ✅ ADD THIS LINE TO EXECUTE THE QUERY
                         echo "<td>" . htmlspecialchars($row['lrn']) . "</td>";
                         echo "<td>" . htmlspecialchars(formatName($row['first_name'], $row['middle_name'], $row['last_name'])) . "</td>";
                         echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['section_name']) . "</td>"; // NEW
+                        echo "<td>" . htmlspecialchars($row['section_name']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                         echo "<td>
                             <div class='action-buttons'>
@@ -87,7 +100,7 @@ $result = $conn->query($sql); // ✅ ADD THIS LINE TO EXECUTE THE QUERY
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='6'>No pending students.</td></tr>";
+                    echo "<tr><td colspan='5'>No pending students.</td></tr>";
                 }
                 ?>
             </tbody>
@@ -271,13 +284,13 @@ function searchStudent() {
 
     function approveStudent(studentId) {
         if (confirm("Are you sure you want to approve this student?")) {
-            window.location.href = `approved_student.php?id=${studentId}`;
+            window.location.href = `adviser_approved_student.php?id=${studentId}`;
         }
     }
 
     function rejectStudent(studentId) {
         if (confirm("Are you sure you want to reject this student?")) {
-            window.location.href = `reject_student.php?id=${studentId}`;
+            window.location.href = `adviser_reject_student.php?id=${studentId}`;
         }
     }
 
