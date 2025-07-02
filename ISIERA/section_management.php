@@ -1,24 +1,17 @@
 <?php
 include 'db_connection.php';
 
-// Create table if not exists (for development/demo purpose)
-$conn->query("CREATE TABLE IF NOT EXISTS sections (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  section_name VARCHAR(100) UNIQUE NOT NULL,
-  student_type ENUM('JHS','SHS') NOT NULL,
-  grade_level INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)");
-
 // Add Section
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_section'])) {
     $name = trim($_POST['section_name']);
     $type = $_POST['student_type'];
-    $grade = "Grade " . $_POST['grade_level'];
+    $gradeNum = $_POST['grade_level'];
+    $gradeLevel = "Grade " . $gradeNum;
+    $strand_id = ($type === 'SHS' && !empty($_POST['strand_id'])) ? intval($_POST['strand_id']) : null;
 
-    if ($name && $type && $grade) {
-        $stmt = $conn->prepare("INSERT IGNORE INTO sections (section_name, student_type, grade_level) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $name, $type, $grade);  // Note: use "sss" since all are strings now
+    if ($name && $type && $gradeNum) {
+        $stmt = $conn->prepare("INSERT INTO sections (section_name, student_type, grade_level, strand_id) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("sssi", $name, $type, $gradeLevel, $strand_id);
         $stmt->execute();
         $success = "Section added successfully!";
     } else {
@@ -26,13 +19,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_section'])) {
     }
 }
 
-
-// Fetch all sections
-$sectionsResult = $conn->query("SELECT * FROM sections ORDER BY grade_level ASC, section_name ASC");
+// Fetch all sections with strand name
+$sectionsResult = $conn->query("
+    SELECT s.*, st.name AS strand_name 
+    FROM sections s 
+    LEFT JOIN strands st ON s.strand_id = st.id
+    ORDER BY s.grade_level ASC, s.section_name ASC
+");
 $sections = $sectionsResult->fetch_all(MYSQLI_ASSOC);
 
-
+// Fetch all strands
+$strandsResult = $conn->query("SELECT id, name FROM strands ORDER BY name ASC");
+$strands = $strandsResult->fetch_all(MYSQLI_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -214,6 +214,7 @@ $sections = $sectionsResult->fetch_all(MYSQLI_ASSOC);
     <tr>
       <th>Section Name</th>
       <th>Grade Level</th>
+      <th>Strand</th>
       <th>Student Type</th>
       <th>Created At</th>
     </tr>
@@ -223,6 +224,7 @@ $sections = $sectionsResult->fetch_all(MYSQLI_ASSOC);
       <tr>
         <td><?= htmlspecialchars($section['section_name']) ?></td>
         <td><?= htmlspecialchars($section['grade_level']) ?></td>
+        <td><?= $section['student_type'] === 'SHS' ? htmlspecialchars($section['strand_name']) : '-' ?></td>
         <td><?= htmlspecialchars($section['student_type']) ?></td>
         <td><?= htmlspecialchars($section['created_at']) ?></td>
       </tr>
@@ -240,19 +242,30 @@ $sections = $sectionsResult->fetch_all(MYSQLI_ASSOC);
     <input type="text" name="section_name" required>
 
     <label>Student Type</label>
-    <select name="student_type" required>
-      <option value="">-- Select --</option>
-      <option value="JHS">JHS</option>
-      <option value="SHS">SHS</option>
-    </select>
+<select name="student_type" required onchange="toggleStrand(this.value)">
+  <option value="">-- Select --</option>
+  <option value="JHS">JHS</option>
+  <option value="SHS">SHS</option>
+</select>
 
-    <label>Grade Level</label>
-    <select name="grade_level" required>
-      <option value="">-- Select --</option>
-      <?php for ($i = 7; $i <= 12; $i++): ?>
-        <option value="<?= $i ?>">Grade <?= $i ?></option>
-      <?php endfor; ?>
-    </select>
+<label>Grade Level</label>
+<select name="grade_level" required>
+  <option value="">-- Select --</option>
+  <?php for ($i = 7; $i <= 12; $i++): ?>
+    <option value="<?= $i ?>">Grade <?= $i ?></option>
+  <?php endfor; ?>
+</select>
+
+
+<div id="strandSelect" style="display: none;">
+  <label>Strand</label>
+  <select name="strand_id">
+    <option value="">-- Select Strand --</option>
+    <?php foreach ($strands as $strand): ?>
+      <option value="<?= $strand['id'] ?>"><?= htmlspecialchars($strand['name']) ?></option>
+    <?php endforeach; ?>
+  </select>
+</div>
 
     <button type="submit" name="add_section">Save Section</button>
   </form>
@@ -272,6 +285,27 @@ $sections = $sectionsResult->fetch_all(MYSQLI_ASSOC);
     const modal = document.getElementById('addSectionModal');
     if (e.target === modal) closeModal();
   }
+</script>
+
+<script>
+function toggleStrand(value) {
+  const strandDiv = document.getElementById('strandSelect');
+  strandDiv.style.display = (value === 'SHS') ? 'block' : 'none';
+}
+
+function openModal() {
+  document.getElementById('addSectionModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('addSectionModal').style.display = 'none';
+}
+
+// Optional: close modal when clicking outside
+window.onclick = function(e) {
+  const modal = document.getElementById('addSectionModal');
+  if (e.target === modal) closeModal();
+}
 </script>
 
 
